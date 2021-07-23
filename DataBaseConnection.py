@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-Client = MongoClient('mongodb://localhost:27017')
-db = Client['BackDataBase']
+Client = MongoClient("mongodb+srv://WD-project:wafaa12345@cluster0.v5htd.mongodb.net/test")
+db = Client['BackendServer']
 x = db.Schedule
 value = {
     'name':"kjhgfd",
