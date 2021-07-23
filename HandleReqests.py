@@ -13,7 +13,7 @@ def gg():
 def redirect_login():
     idUser = request.args.get('idUser')
     password = request.args.get('password')
-    url = "http://192.168.1.7:3000/loginAuthorization"
+    url = "https://dashboard.heroku.com/loginAuthorization"
     url += "?idUser=" + idUser + "&password=" + password
     return redirect(url)
 
@@ -21,7 +21,7 @@ def redirect_login():
 @app.route("/checkAndSendEmail", methods=['GET'])
 def redirect_checkAndSendEmail():
     email = request.args.get('email')
-    url = "http://192.168.1.7:3000/checkAndSendEmail"
+    url = "https://dashboard.heroku.com/checkAndSendEmail"
     url += "?email=" + email
     return redirect(url)
 
@@ -31,7 +31,7 @@ def redirect_getMaterialsOfDepartment():
     idIstructor = request.args.get('idIstructor')
     year = request.args.get('year')
     sem = request.args.get('sem')
-    url = "http://192.168.1.7:3000/getMaterialsOfDepartment"
+    url = "https://dashboard.heroku.com/getMaterialsOfDepartment"
     url += "?idIstructor=" + idIstructor
     url += "&year=" + year
     url += "&sem=" + sem
@@ -41,7 +41,7 @@ def redirect_getMaterialsOfDepartment():
 @app.route("/getRoomsofDep", methods=['GET'])
 def redirect_getRoomsofDep():
     idDep = request.args.get('idDep')
-    url = "http://192.168.1.7:3000/getRoomsofDep"
+    url = "https://dashboard.heroku.com/getRoomsofDep"
     url += "?idDep=" + idDep
     return redirect(url)
 
@@ -52,7 +52,7 @@ def redirect_editRoom():
     number = request.args.get('number')
     campous = request.args.get('campous')
     type = request.args.get('type')
-    url = "http://192.168.1.7:3000/editRoom"
+    url = "https://dashboard.heroku.com/editRoom"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&campous=" + campous
@@ -69,7 +69,7 @@ def redirect_addCourseToDepartment():
     type = request.args.get('type')
     year = request.args.get('year')
     sem = request.args.get('sem')
-    url = "http://192.168.1.7:3000/addCourseToDepartment?"
+    url = "https://dashboard.heroku.com/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
     url += "number=" + number + "&"
