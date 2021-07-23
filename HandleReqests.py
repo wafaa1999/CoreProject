@@ -1,6 +1,14 @@
 from flask import Flask, jsonify, redirect, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
+cors = CORS(app, resources={
+    r"/*": {
+        "origins" : "*"
+    }
+})
 
 @app.route('/test', methods=['Get'])
 def gg():
@@ -42,6 +50,7 @@ def redirect_getMaterialsOfDepartment():
 def redirect_getRoomsofDep():
     idDep = request.args.get('idDep')
     url = "https://dashboard.heroku.com/getRoomsofDep"
+    # url = "http://127.0.0.1:5000/getRoomsofDep"
     url += "?idDep=" + idDep
     return redirect(url)
 
