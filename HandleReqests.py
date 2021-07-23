@@ -2,6 +2,12 @@ from flask import Flask, jsonify, redirect, request
 
 app = Flask(__name__)
 
+@app.route('/test', methods=['Get'])
+def gg():
+    response = row = dict(
+            project='Core', )
+    return jsonify({'response': response})
+
 
 @app.route("/loginAuthorization", methods=['GET'])
 def redirect_login():
