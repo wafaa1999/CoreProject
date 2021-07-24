@@ -21,7 +21,7 @@ def gg():
 def redirect_login():
     idUser = request.args.get('idUser')
     password = request.args.get('password')
-    url = "https://dashboard.heroku.com/loginAuthorization"
+    url = "https://virtual-grad.herokuapp.com/loginAuthorization"
     url += "?idUser=" + idUser + "&password=" + password
     return redirect(url)
 
@@ -29,7 +29,7 @@ def redirect_login():
 @app.route("/checkAndSendEmail", methods=['GET'])
 def redirect_checkAndSendEmail():
     email = request.args.get('email')
-    url = "https://dashboard.heroku.com/checkAndSendEmail"
+    url = "https://virtual-grad.herokuapp.com/checkAndSendEmail"
     url += "?email=" + email
     return redirect(url)
 
@@ -39,7 +39,7 @@ def redirect_getMaterialsOfDepartment():
     idIstructor = request.args.get('idIstructor')
     year = request.args.get('year')
     sem = request.args.get('sem')
-    url = "https://dashboard.heroku.com/getMaterialsOfDepartment"
+    url = "https://virtual-grad.herokuapp.com/getMaterialsOfDepartment"
     url += "?idIstructor=" + idIstructor
     url += "&year=" + year
     url += "&sem=" + sem
@@ -61,7 +61,7 @@ def redirect_editRoom():
     number = request.args.get('number')
     campous = request.args.get('campous')
     type = request.args.get('type')
-    url = "https://dashboard.heroku.com/editRoom"
+    url = "https://virtual-grad.herokuapp.com/editRoom"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&campous=" + campous
@@ -78,7 +78,7 @@ def redirect_addCourseToDepartment():
     type = request.args.get('type')
     year = request.args.get('year')
     sem = request.args.get('sem')
-    url = "https://dashboard.heroku.com/addCourseToDepartment?"
+    url = "https://virtual-grad.herokuapp.com/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
     url += "number=" + number + "&"
@@ -86,9 +86,6 @@ def redirect_addCourseToDepartment():
     url += "type=" + type + "&"
     url += "year=" + year + "&"
     url += "sem=" + sem
-
-
-
     return redirect(url)
 
 
