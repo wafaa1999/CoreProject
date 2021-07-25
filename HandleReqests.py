@@ -97,5 +97,32 @@ def redirect_getAllMaterialsOfDepartment():
     url += "?idDep=" + idDep
     return redirect(url)
 
+
+@app.route("/addRoomToDepartment", methods=['GET'])
+def addRoomToDepartment():
+    idDep = request.args.get('idDep')
+    number = request.args.get('number')
+    type = request.args.get('type')
+    campous = request.args.get('campous')
+    url = "https://virtual-grad.herokuapp.com/getAllMaterialsOfDepartment"
+    url += "?idDep=" + idDep
+    url += "&number=" + number
+    url += "&type=" + type
+    url += "&campous=" + campous
+    return redirect(url)
+
+@app.route("/deleteRoomFromDep", methods=['GET'])
+def deleteRoomFromDep():
+    idDep = request.args.get('idDep')
+    number = request.args.get('number')
+    url = "https://virtual-grad.herokuapp.com/deleteRoomFromDep"
+    url += "?idDep=" + idDep
+    url += "&number=" + number
+    return redirect(url)
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3002)
