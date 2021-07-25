@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, redirect, request
 from flask_cors import CORS
 
+from DataBaseConnection import dataBaseC
+
 app = Flask(__name__)
 
 CORS(app)
@@ -62,6 +64,8 @@ def redirect_editRoom():
     number = request.args.get('number')
     campous = request.args.get('campous')
     type = request.args.get('type')
+    data4 = dataBaseC()
+    data4.update_data_for_room( idDep, number, campous, type)
     url = "https://virtual-grad.herokuapp.com/editRoom"
     url += "?idDep=" + idDep
     url += "&number=" + number
@@ -79,6 +83,8 @@ def redirect_addCourseToDepartment():
     type = request.args.get('type')
     year = request.args.get('year')
     sem = request.args.get('sem')
+    data2 = dataBaseC()
+    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem)
     url = "https://virtual-grad.herokuapp.com/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
@@ -104,6 +110,8 @@ def addRoomToDepartment():
     number = request.args.get('number')
     type = request.args.get('type')
     campous = request.args.get('campous')
+    data1 = dataBaseC()
+    data1.add_room(idDep, number, type, campous)
     url = "https://virtual-grad.herokuapp.com/addRoomToDepartment"
     url += "?idDep=" + idDep
     url += "&number=" + number
@@ -111,17 +119,31 @@ def addRoomToDepartment():
     url += "&campous=" + campous
     return redirect(url)
 
+
+@app.route("/saveMatOfDraft", methods=['GET'])
+def saveMatOfDraft():
+    tableName = request.args.get('tableName')
+    depId = request.args.get('depId')
+    courseIns = request.args.get('courseIns')
+    courseName = request.args.get('courseName')
+    flag = request.args.get('flag')
+    timeSlot = request.args.get('timeSlot')
+    roomType = request.args.get('roomType')
+    date = request.args.get('date')
+    data1 = dataBaseC()
+    data1.save_to_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
+
+
 @app.route("/deleteRoomFromDep", methods=['GET'])
 def deleteRoomFromDep():
     idDep = request.args.get('idDep')
     number = request.args.get('number')
+    data3 = dataBaseC()
+    data3.delete_room_from_dep(idDep, number)
     url = "https://virtual-grad.herokuapp.com/deleteRoomFromDep"
     url += "?idDep=" + idDep
     url += "&number=" + number
     return redirect(url)
-
-
-
 
 
 if __name__ == "__main__":

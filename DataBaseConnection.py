@@ -1,74 +1,116 @@
 from pymongo import MongoClient
-Client = MongoClient("mongodb+srv://WD-project:wafaa12345@cluster0.v5htd.mongodb.net/test")
-db = Client['BackendServer']
-x = db.Schedule
-value = {
-    'name':"kjhgfd",
-    'type':"اجباري",
-    'number':"jhgfd",
-    'courseHours':0,
-    'year':0,
-    'idDepartment':"60ddc9735b4d43f8eaaabf83"
-}
-s = x.insert_one(value)
-value.clear()
-print(s)
+
+class dataBaseC():
+
+    def __init__(self):
+
+        Client = MongoClient("mongodb+srv://WD-project:wafaa12345@cluster0.v5htd.mongodb.net/test")
+        self._db = Client['BackendServer']
+
+    def get_rooms(self):
+        collection = self._db.Room
+        result = []
+        for i in collection.find():
+            result.append(i)
+        return result
 
 
-# y = db.Department
-# value = {
-#     'name':"",
-#     'type':"اجباري",
-#     'number':"",
-#     'courseHours':0,
-#     'year':0,
-#     'idDepartment':"60ddc9735b4d43f8eaaabf83"
-# }
-#
-#
-# ROOMS = [["1", "برمجة الحاسوب","10636111","3"],
-#                ["2","تركيب بيانات و خورزميات","10636211" ,"3"],
-#                ["2", "الرياضيات المنفصلة","10636215","3"],
-#                ["2", "تصميم دوائر رقمية 1","10636221","3"],
-#                ["2", "البرمجة باستخرام الكيانات","10636212","3"],
-#                ["3", "المعالجات الدقيقة","10636322","3"],
-#                ["3", "تصميم دوائر رقمية 2","10636321","3"],
-#                ["3", "مختبر تصميم دوائر رقمية 1","10636291","1"],
-#                ["3", "نظم قواعد البيانات","10636315","3"],
-#                ["3", "معالجة الصور الرقمية","10636318","3"],
-#                ["3", "برمجةالويب","10636316","3"],
-#                ["3", "هندسة البرمجيات","10636312","3"],
-#                ["3", "مختبر تصميم دوائر رقمية 2","10636391","1"],
-#                ["3", "عمارة الحاسوب 1","10636323","3"],
-#                ["3", "مختبر المعالجات الدقيقة","10636392","1"],
-#                ["3", "اتصالات الحاسوب و البيانات","10636351","3"],
-#                ["4", "شبكات الحاسوب 1","10636454","3"],
-#                ["4", "نظم التشغيل","10636451","3"],
-#                ["4", "مختبر تصميم الكمبيوتر","10636493","1"],
-#                ["4", "الدوائر الالكترونية الرقمية","10636332","3"],
-#                ["4", "مهارات التفكير النقدي والبحث","10636410","3"],
-#                ["4", "المتحكمات الدقيقة","10636426","3"],
-#                ["4", "عمارة الحاسوب 2","10636423","3"],
-#                ["4", "مختبر الشبكات","10636594","1"],
-#                ["4", "شبكات 2","10636455","3"],
-#                ["5", "ادارة اعمال تكنولوجيا المعلومات","10636475","3"],
-#                ["5", "مختبر المتحكمات الدقيقة","10636496","1"]
-#                ]
-#
-# for i in range(len(ROOMS)):
-#     value['year']= ROOMS[i][0]
-#     value['name']=ROOMS[i][1]
-#     value['type']= "اجباري"
-#     value['number']=ROOMS[i][2]
-#     value['courseHours']=ROOMS[i][3]
-#     value['idDepartment'] = "60ddc9735b4d43f8eaaabf83"
-#     s = x.insert_one(value)
-#     value.clear()
-#     print(s)
-# x.delete_many({})
-# for record in y.find():
-#      if record['name'] == "هندسة الحاسوب" :
-#          break
-#
+    def add_room(self,idDep, number, type, campous):
+        flag = self.check_room(number)
+        if flag == 'False':
+            collection = self._db.Room
+            row = {
+                "type": type,
+                "number": number,
+                "idDepartment": idDep,
+                "campous": campous
+            }
+            result = collection.insert_one(row)
 
-# print(record['start'])
+    def update_data_for_room(self, idDep, number, campous, type):
+        flag = False
+        collection = self._db["Room"]
+        for i in collection.find():
+            if number == i['number'] and idDep == i['idDepartment']:
+                flag = True
+                doc = collection.find_one_and_update(
+                    {"number": number},
+                    {"$set":
+                         {"campous": campous,
+                          "type": type}
+                     }, upsert=True
+                )
+
+
+    def check_room(self, number):
+        collection = self._db.Room
+        result = []
+        for i in collection.find():
+            if i['number'] == number:
+                return 'True'
+        return 'False'
+
+    def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem):
+        collection = self._db.Course
+        row = {
+            "name": name,
+            "type": type,
+            "number": number,
+            "courseHours": numberOfHour,
+            "year": year,
+            "idDepartment": idDep,
+            "semester": sem,
+            "toDepartments": idDep,
+        }
+
+        result = collection.insert_one(row)
+
+    def delete_room_from_dep(self, idDep, numberr):
+        flag = False
+        collection = self._db["Room"]
+        for i in collection.find():
+            if numberr == i['number'] and idDep == i['idDepartment']:
+                reselt = collection.delete_one({"number": numberr})
+
+
+    def save_to_draft(self, tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date):
+        collection = self._db.Course
+        collection2 = self._db.SavedMaterial
+        fromOtherDep = "false"
+        toOtherDep = "false"
+        if flag ==1:
+            fromOtherDep = "true"
+        elif flag ==2:
+            toOtherDep = "true"
+
+        result = []
+        for i in collection.find():
+            result.append(i)
+        for j in range(len(result)):
+            if result[j]['name'] == courseName:
+
+                row = {
+                    "tableName": tableName,
+                    "depId": depId,
+                    "courseIns": courseIns,
+                    "courseName": courseName,
+                    "year": result[j]['year'],
+                    "semester": result[j]['semester'],
+                    "fromOtherDep": fromOtherDep,
+                    "toOtherDep": toOtherDep,
+                    "timeSolt": timeSlot,
+                    "duration": result[j]['duration'],
+                    "roomType": roomType,
+                    "date": date,
+                }
+
+                result = collection.insert_one(row)
+
+
+
+
+
+
+
+
+

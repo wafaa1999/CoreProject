@@ -1,3 +1,4 @@
+from DataBaseConnection import dataBaseC
 from DataClass import Data
 from Solve import Solve
 
@@ -6,16 +7,27 @@ def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
-
-
-
-
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    ROOMS = [["114070", "A"], ["114040", "A"], ["112020", "A"],  ["111190", "A"],
-             ["111181", "A"],
-             ["11B1160", "B"],["11B1140","F"], ["11B1150", "D"], ["11B1141", "C"],
-             ["114080","G"],["113080", "E"]]
+    ROOMS = []
+    data = dataBaseC()
+    result = []
+    arr = ["B", "C","D", "E", "F", "G","H", "I","J", "K","L", "M","N", "O","P", "Q","R", "S","T", "U","V", "W"]
+    result = data.get_rooms()
+    index = 0
+    for i in range(len(result)):
+        if result[i]['type'] == 'قاعة تدريس' :
+            ROOMS.append([result[i]['number'], "A"])
+        else:
+            ROOMS.append([result[i]['number'], arr[index]])
+            index = index+1
+
+
+    # ROOMS = [["114070", "A"], ["114040", "A"], ["112020", "A"],  ["111190", "A"],
+    #          ["111181", "A"],
+    #          ["11B1160", "B"],["11B1140","F"], ["11B1150", "D"], ["11B1141", "C"],
+    #          ["114080","G"],["113080", "E"]]
+
+
 
     MEETING_TIMES_1 = [["MT1", 8, 9, ["Sunday", "Tuesday", "Thursday"]],
                        ["MT2", 9, 10, ["Sunday", "Tuesday", "Thursday"]],
