@@ -104,7 +104,7 @@ def addRoomToDepartment():
     number = request.args.get('number')
     type = request.args.get('type')
     campous = request.args.get('campous')
-    url = "https://virtual-grad.herokuapp.com/getAllMaterialsOfDepartment"
+    url = "https://virtual-grad.herokuapp.com/addRoomToDepartment"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&type=" + type
