@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 cors = CORS(app, resources={
     r"/*": {
-        "origins" : "*"
+        "origins": "*"
     }
 })
 
@@ -29,7 +29,8 @@ def redirect_login():
 @app.route("/checkAndSendEmail", methods=['GET'])
 def redirect_checkAndSendEmail():
     email = request.args.get('email')
-    url = "https://virtual-grad.herokuapp.com/checkAndSendEmail"
+    # url = "https://virtual-grad.herokuapp.com/checkAndSendEmail"
+    url = "http://127.0.0.1:5000/checkAndSendEmail"
     url += "?email=" + email
     return redirect(url)
 
@@ -88,6 +89,13 @@ def redirect_addCourseToDepartment():
     url += "sem=" + sem
     return redirect(url)
 
+
+@app.route("/getAllMaterialsOfDepartment", methods=['GET'])
+def redirect_getAllMaterialsOfDepartment():
+    idDep = request.args.get('idDep')
+    url = "https://virtual-grad.herokuapp.com/getAllMaterialsOfDepartment"
+    url += "?idDep=" + idDep
+    return redirect(url)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3002)
