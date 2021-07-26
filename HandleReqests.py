@@ -19,15 +19,15 @@ def gg():
     return jsonify({'response': response})
 
 
-# @app.route("/loginAuthorization", methods=['GET'])
-# def redirect_login():
-#     idUser = request.args.get('idUser')
-#     password = request.args.get('password')
-#     req1 = req(idUser,password)
-#     req1.get_dep()
-#     url = "https://virtual-grad.herokuapp.com/loginAuthorization"
-#     url += "?idUser=" + idUser + "&password=" + password
-#     return redirect(url)
+@app.route("/loginAuthorization", methods=['GET'])
+def redirect_login():
+    idUser = request.args.get('idUser')
+    password = request.args.get('password')
+    req1 = req(idUser,password)
+    req1.get_dep()
+    url = "https://virtual-grad.herokuapp.com/loginAuthorization"
+    url += "?idUser=" + idUser + "&password=" + password
+    return redirect(url)
 
 
 @app.route("/checkAndSendEmail", methods=['GET'])

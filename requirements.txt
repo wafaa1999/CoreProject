@@ -20,3 +20,4 @@ reqs==0.0.2
 six==1.16.0
 wcwidth==0.2.5
 Werkzeug==2.0.1
+requests
