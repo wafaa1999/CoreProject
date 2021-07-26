@@ -99,12 +99,13 @@ class dataBaseC():
                     "fromOtherDep": fromOtherDep,
                     "toOtherDep": toOtherDep,
                     "timeSolt": timeSlot,
-                    "duration": result[j]['duration'],
+                    "duration": result[j]['courseHours'],
                     "roomType": roomType,
                     "date": date,
                 }
 
-                result = collection.insert_one(row)
+                result = collection2.insert_one(row)
+                return 'True'
 
 
 

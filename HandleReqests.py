@@ -19,13 +19,15 @@ def gg():
     return jsonify({'response': response})
 
 
-@app.route("/loginAuthorization", methods=['GET'])
-def redirect_login():
-    idUser = request.args.get('idUser')
-    password = request.args.get('password')
-    url = "https://virtual-grad.herokuapp.com/loginAuthorization"
-    url += "?idUser=" + idUser + "&password=" + password
-    return redirect(url)
+# @app.route("/loginAuthorization", methods=['GET'])
+# def redirect_login():
+#     idUser = request.args.get('idUser')
+#     password = request.args.get('password')
+#     req1 = req(idUser,password)
+#     req1.get_dep()
+#     url = "https://virtual-grad.herokuapp.com/loginAuthorization"
+#     url += "?idUser=" + idUser + "&password=" + password
+#     return redirect(url)
 
 
 @app.route("/checkAndSendEmail", methods=['GET'])
@@ -122,6 +124,7 @@ def addRoomToDepartment():
 
 @app.route("/saveMatOfDraft", methods=['GET'])
 def saveMatOfDraft():
+    response = []
     tableName = request.args.get('tableName')
     depId = request.args.get('depId')
     courseIns = request.args.get('courseIns')
@@ -131,7 +134,12 @@ def saveMatOfDraft():
     roomType = request.args.get('roomType')
     date = request.args.get('date')
     data1 = dataBaseC()
-    data1.save_to_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
+    result =data1.save_to_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
+    row = dict(
+        stat=result
+    )
+    response.append(row)
+    return jsonify({'response': response})
 
 
 @app.route("/deleteRoomFromDep", methods=['GET'])

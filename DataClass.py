@@ -142,7 +142,7 @@ class Data:
             elif not fromotherDepartement and not toOtherDepartment:
                 course1 = Course(num, type, name, instr, room, year, num2[0], numberOfSections, sem, False, 0, False, departmentName)
             else:
-                course1 = Course(num, type, name, instr, room, year, num2[0], numberOfSections, sem, False, 0, True, departmentName)
+                course1 = Course(num, type, name, instr, room, year, num2[0], numberOfSections, sem, False, 0, True, departmentName) #بدنا تايم سلوت
 
             self._courses.append(course1)
             if year == 1:
