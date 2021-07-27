@@ -29,6 +29,20 @@ def redirect_login():
     return redirect(url)
 
 
+@app.route("/firstTime", methods=['GET'])
+def firstTime():
+    response = []
+    idUser = request.args.get('idUser')
+    password = request.args.get('password')
+    req1 = req()
+    re = req1.get_dep(idUser,password)
+    row = dict(
+        stat=re
+    )
+    response.append(row)
+    return jsonify({'response': response})
+
+
 @app.route("/checkAndSendEmail", methods=['GET'])
 def redirect_checkAndSendEmail():
     email = request.args.get('email')
@@ -139,6 +153,14 @@ def saveMatOfDraft():
     )
     response.append(row)
     return jsonify({'response': response})
+
+
+@app.route("/getAllIsn", methods=['GET'])
+def getAllIsn():
+    idDep = request.args.get('idDep')
+    url = "https://virtual-grad.herokuapp.com/getAllIsn"
+    url += "?idDep=" + idDep
+    return redirect(url)
 
 
 @app.route("/deleteRoomFromDep", methods=['GET'])

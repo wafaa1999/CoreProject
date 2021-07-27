@@ -27,6 +27,8 @@ class dataBaseC():
             }
             result = collection.insert_one(row)
 
+
+
     def update_data_for_room(self, idDep, number, campous, type):
         flag = False
         collection = self._db["Room"]
@@ -51,19 +53,33 @@ class dataBaseC():
         return 'False'
 
     def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem):
-        collection = self._db.Course
-        row = {
-            "name": name,
-            "type": type,
-            "number": number,
-            "courseHours": numberOfHour,
-            "year": year,
-            "idDepartment": idDep,
-            "semester": sem,
-            "toDepartments": idDep,
-        }
+        response = []
+        flag = True
+        result = self.get_course_of_dep(idDep)
+        for i in range(len(result)):
+            if result[i]['number'] == number:
+                flag = False
+        if flag:
+            collection = self._db.Course
+            row = {
+                "name": name,
+                "type": type,
+                "number": number,
+                "courseHours": numberOfHour,
+                "year": year,
+                "idDepartment": idDep,
+                "semester": sem,
+                "toDepartments": idDep,
+            }
 
-        result = collection.insert_one(row)
+            result = collection.insert_one(row)
+            response.append("1")
+
+        else:
+            response.append("0")
+
+        return response
+
 
     def delete_room_from_dep(self, idDep, numberr):
         flag = False
@@ -129,7 +145,12 @@ class dataBaseC():
         }
         result = collection.insert_one(row)
 
-
+    def get_course_of_dep(self, idDep):
+        course = self._db.Course
+        result = []
+        for i in course.find():
+            result.append(i)
+        return result
 
 
 
