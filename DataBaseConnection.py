@@ -107,7 +107,27 @@ class dataBaseC():
                 result = collection2.insert_one(row)
                 return 'True'
 
+    def check_dep(self, idDep):
+        collection = self._db.FristTime
+        result = []
+        for i in collection.find():
+            if i['idDep'] == idDep:
+                return 'True'  # موجوده من قبل
+        row = {
+            "idDep": idDep,
+            "flag": 'True',
+        }
 
+        result = collection.insert_one(row)
+        return 'False'
+
+    def add_Inst_to_dep(self, idDep, name):
+        collection = self._db.Inst
+        row = {
+            "name": name,
+            "idDepartment": idDep,
+        }
+        result = collection.insert_one(row)
 
 
 
