@@ -184,6 +184,29 @@ class dataBaseC():
             result.append(i)
         return result
 
+    def get_course_from_draft(self, idDep):
+        response = []
+        course = self._db.SavedMaterial
+        result = []
+        for i in course.find():
+            if i['depId'] == idDep:
+               result.append(i)
+
+        for i in range(len(result)):
+            row = dict(
+                tableName=result[i]['tableName'],
+                depId=result[i]['depId'],
+                courseIns=result[i]['courseIns'],
+                courseName=result[i]['courseName'],
+                year=result[i]['year'],
+                semester=result[i]['semester'],
+                fromOtherDep=result[i]['fromOtherDep'],
+                toOtherDep=result[i]['toOtherDep'],
+                timeSolt=result[i]['timeSolt'],
+                roomType=result[i]['roomType'])
+            response.append(row)
+
+        return response
 
 
 
