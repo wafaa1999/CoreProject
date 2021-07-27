@@ -201,11 +201,12 @@ def getFromDraft():
     response = db.get_course_from_draft(idDep)
     return jsonify({'response': response})
 
-
 @app.route("/getAllDep", methods=['GET'])
 def getAllDep():
     url = "https://virtual-grad.herokuapp.com/getAllDep"
     return redirect(url)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3002)
