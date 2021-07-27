@@ -174,6 +174,26 @@ def deleteRoomFromDep():
     url += "&number=" + number
     return redirect(url)
 
+@app.route("/deleteFromSaveMatOfDraft", methods=['GET'])
+def deleteFromSaveMatOfDraft():
+    response = []
+    tableName = request.args.get('tableName')
+    depId = request.args.get('depId')
+    courseIns = request.args.get('courseIns')
+    courseName = request.args.get('courseName')
+    flag = request.args.get('flag')
+    timeSlot = request.args.get('timeSlot')
+    roomType = request.args.get('roomType')
+    date = request.args.get('date')
+    data1 = dataBaseC()
+    result =data1.delete_from_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType,date)
+    row = dict(
+        stat=result
+    )
+    response.append(row)
+    return jsonify({'response': response})
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3002)

@@ -125,6 +125,36 @@ class dataBaseC():
         return 'False'
 
 
+    def delete_from_draft(self, tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date):
+        collection2 = self._db.SavedMaterial
+        fromOtherDep = "false"
+        toOtherDep = "false"
+        if flag == 1:
+            fromOtherDep = "true"
+        elif flag == 2:
+            toOtherDep = "true"
+
+        # for i in collection2.find():
+        #     print(i['courseIns'])
+        #     if tableName == i['tableName'] and depId == i['depId'] and courseIns == i['courseIns'] \
+        #             and courseName == i['courseName'] and timeSlot == i['timeSolt'] and roomType == i['roomType'] and date == i['date']\
+        #             and fromOtherDep == i['fromOtherDep'] and toOtherDep == i['toOtherDep']:
+        reselt = collection2.delete_one({"tableName": tableName,
+                                                 "depId": depId,
+                                                 "courseIns": courseIns,
+                                                 "courseName": courseName,
+                                                 "timeSolt": timeSlot,
+                                                 "roomType": roomType,
+                                                 "date": date,
+                                                 "toOtherDep": toOtherDep,
+                                                 "fromOtherDep": fromOtherDep
+                                                 })
+        print(reselt)
+        return 'True'
+
+
+
+
     def check_dep(self, idDep):
         collection = self._db.FristTime
         result = []
