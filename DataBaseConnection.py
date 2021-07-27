@@ -122,6 +122,7 @@ class dataBaseC():
 
                 result = collection2.insert_one(row)
                 return 'True'
+        return 'False'
 
     def check_dep(self, idDep):
         collection = self._db.FristTime
