@@ -124,6 +124,7 @@ class dataBaseC():
                 return 'True'
         return 'False'
 
+
     def check_dep(self, idDep):
         collection = self._db.FristTime
         result = []
