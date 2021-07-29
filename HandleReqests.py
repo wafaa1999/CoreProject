@@ -98,23 +98,27 @@ def redirect_addCourseToDepartment():
     type = request.args.get('type')
     year = request.args.get('year')
     sem = request.args.get('sem')
+    flag = request.args.get('flag')
+    toDepartments = request.args.get('toDepartments')
     data2 = dataBaseC()
-    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem)
-    url = "https://virtual-grad.herokuapp.com/addCourseToDepartment?"
+    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments)
+    url = "http://127.0.0.1:5000/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
     url += "number=" + number + "&"
     url += "numberOfHour=" + numberOfHour + "&"
     url += "type=" + type + "&"
     url += "year=" + year + "&"
-    url += "sem=" + sem
+    url += "sem=" + sem + "&"
+    url += "flag=" + flag + "&"
+    url += "toDepartments=" + toDepartments
     return redirect(url)
 
 
 @app.route("/getAllMaterialsOfDepartment", methods=['GET'])
 def redirect_getAllMaterialsOfDepartment():
     idDep = request.args.get('idDep')
-    url = "https://virtual-grad.herokuapp.com/getAllMaterialsOfDepartment"
+    url = "http://127.0.0.1:5000/getAllMaterialsOfDepartment"
     url += "?idDep=" + idDep
     return redirect(url)
 

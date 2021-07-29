@@ -52,14 +52,24 @@ class dataBaseC():
                 return 'True'
         return 'False'
 
-    def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem):
+    def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments):
         response = []
-        flag = True
+        flag1 = True
+        if flag == '0':
+            flagFrom = 'false'
+            flagTo = 'false'
+        elif flag == '1':
+            flagFrom = 'true'
+            flagTo = 'false'
+        else:
+            flagFrom = 'false'
+            flagTo = 'true'
+
         result = self.get_course_of_dep(idDep)
         for i in range(len(result)):
             if result[i]['number'] == number:
-                flag = False
-        if flag:
+                flag1 = False
+        if flag1:
             collection = self._db.Course
             row = {
                 "name": name,
@@ -69,7 +79,9 @@ class dataBaseC():
                 "year": year,
                 "idDepartment": idDep,
                 "semester": sem,
-                "toDepartments": idDep,
+                "toDepartments": toDepartments,
+                "flagFrom": flagFrom,
+                "flagTo": flagTo,
             }
 
             result = collection.insert_one(row)
