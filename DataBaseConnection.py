@@ -67,7 +67,7 @@ class dataBaseC():
 
         result = self.get_course_of_dep(idDep)
         for i in range(len(result)):
-            if result[i]['number'] == number:
+            if result[i]['number'] == number and idDep == result[i]['idDepartment']:
                 flag1 = False
         if flag1:
             collection = self._db.Course
