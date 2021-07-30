@@ -220,7 +220,7 @@ def getAllDep():
 def getMatOfSpeDep():
     idDep = request.args.get('idDep')
     id = request.args.get('id')
-    url = "http://127.0.0.1:3500/getMatOfSpeDep"
+    url = "https://virtual-grad.herokuapp.com/getMatOfSpeDep"
     url += '?idDep=' + idDep
     url += '&id=' + id
     return redirect(url)
