@@ -210,12 +210,20 @@ def getAllDep():
     url = "https://virtual-grad.herokuapp.com/getAllDep"
     return redirect(url)
 
-@app.route("/testingPost", methods=['POST'])
-def testu():
-    list = request
-    print("WAfaa")
-    return "true"
+# @app.route("/testingPost", methods=['POST'])
+# def testu():
+#     list = request
+#     print("WAfaa")
+#     return "true"
 
+@app.route("/getMatOfSpeDep", methods=['GET'])
+def getMatOfSpeDep():
+    idDep = request.args.get('idDep')
+    id = request.args.get('id')
+    url = "http://127.0.0.1:5000/getMatOfSpeDep"
+    url += '?idDep=' + idDep
+    url += '&id=' + id
+    return redirect(url)
 
 
 if __name__ == "__main__":

@@ -141,9 +141,9 @@ class dataBaseC():
         collection2 = self._db.SavedMaterial
         fromOtherDep = "false"
         toOtherDep = "false"
-        if flag == 1:
+        if flag == '1':
             fromOtherDep = "true"
-        elif flag == 2:
+        elif flag == '2':
             toOtherDep = "true"
 
         # for i in collection2.find():
