@@ -220,11 +220,11 @@ def getAllDep():
 def getMatOfSpeDep():
     idDep = request.args.get('idDep')
     id = request.args.get('id')
-    url = "http://127.0.0.1:5000/getMatOfSpeDep"
+    url = "http://127.0.0.1:3500/getMatOfSpeDep"
     url += '?idDep=' + idDep
     url += '&id=' + id
     return redirect(url)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=3002)
+    app.run(debug=True, host='0.0.0.0', port=3015)
