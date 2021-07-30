@@ -210,6 +210,12 @@ def getAllDep():
     url = "https://virtual-grad.herokuapp.com/getAllDep"
     return redirect(url)
 
+@app.route("/testingPost", methods=['POST'])
+def testu():
+    list = request
+    print("WAfaa")
+    return "true"
+
 
 
 if __name__ == "__main__":
