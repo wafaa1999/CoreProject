@@ -129,13 +129,15 @@ def addRoomToDepartment():
     number = request.args.get('number')
     type = request.args.get('type')
     campous = request.args.get('campous')
+    name = request.args.get('name')
     data1 = dataBaseC()
-    data1.add_room(idDep, number, type, campous)
+    data1.add_room(idDep, number, type, campous, name)
     url = "https://virtual-grad.herokuapp.com/addRoomToDepartment"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&type=" + type
     url += "&campous=" + campous
+    url += "&name=" + name
     return redirect(url)
 
 
