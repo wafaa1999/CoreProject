@@ -39,7 +39,7 @@ class req:
         data = r.json()
         for i in range(len(data['response'])):
             result.append([data['response'][i]['number'], data['response'][i]['type'],
-                           idDepu, data['response'][i]['campous']])
+                           idDepu, data['response'][i]['campous'],data['response'][i]['name']])
         return result
 
     def get_mat(self, idDepu):

@@ -79,13 +79,15 @@ def redirect_editRoom():
     number = request.args.get('number')
     campous = request.args.get('campous')
     type = request.args.get('type')
+    name = request.args.get('name')
     data4 = dataBaseC()
-    data4.update_data_for_room( idDep, number, campous, type)
+    data4.update_data_for_room( idDep, number, campous, type, name)
     url = "https://virtual-grad.herokuapp.com/editRoom"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&campous=" + campous
     url += "&type=" + type
+    url += "&name=" + name
     return redirect(url)
 
 
@@ -132,7 +134,7 @@ def addRoomToDepartment():
     name = request.args.get('name')
     data1 = dataBaseC()
     data1.add_room(idDep, number, type, campous, name)
-    url = "https://virtual-grad.herokuapp.com/addRoomToDepartment"
+    url = "http://127.0.0.1:3500/addRoomToDepartment"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&type=" + type
