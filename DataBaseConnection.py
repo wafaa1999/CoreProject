@@ -220,6 +220,68 @@ class dataBaseC():
 
         return response
 
+    def add_table(self, idDep, name, year, semester, status):
+        response = []
+        flag = False
+        collection = self._db.tables
+        result = []
+        for i in collection.find():
+            if i['idDep'] == idDep and i['name'] == name:
+              flag = True
+        if not flag:
+            row = {
+                "name": name,
+                "idDep": idDep,
+                "year": year,
+                "semester": semester,
+                "status": status,
 
+            }
+            result = collection.insert_one(row)
+            row = {
+                "flag": 'true',}
+        else:
+            row = {
+                "flag": 'false', }
+
+        response.append(row)
+        return  response
+
+
+    def delete_table(self, idDep, name):
+        response = []
+        flag = False
+        collection = self._db.tables
+
+        collection.delete_one({"idDep": idDep,
+                                "name": name
+                                })
+        row = {
+            "flag": 'true', }
+        response.append(row)
+        return response
+
+
+    def get_tables_table(self, idDep):
+        response = []
+        flag = False
+        collection = self._db.tables
+        result = []
+        for i in collection.find():
+            if i['idDep'] == idDep:
+                result.append(i)
+
+        for i in range(len(result)):
+            row = {
+                "name": result[i]['name'],
+                "idDep": result[i]['idDep'],
+                "year": result[i]['year'],
+                "semester": result[i]['semester'],
+                "status": result[i]['status'],
+
+            }
+            response.append(row)
+
+        return response
 
 

@@ -225,6 +225,31 @@ def getMatOfSpeDep():
     url += '&id=' + id
     return redirect(url)
 
+@app.route("/addTable", methods=['GET'])
+def addTable():
+    idDep = request.args.get('idDep')
+    name = request.args.get('name')
+    year = request.args.get('year')
+    semester = request.args.get('semester')
+    status = request.args.get('status')
+    response = dataBaseC().add_table(idDep, name, year, semester, status)
+    return jsonify({'response': response})
+
+
+@app.route("/deleteTable", methods=['GET'])
+def deleteTable():
+    idDep = request.args.get('idDep')
+    name = request.args.get('name')
+    response = dataBaseC().delete_table(idDep, name)
+    return jsonify({'response': response})
+
+@app.route("/getTables", methods=['GET'])
+def getTables():
+    idDep = request.args.get('idDep')
+    response = dataBaseC().get_tables_table(idDep)
+    return jsonify({'response': response})
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3015)
