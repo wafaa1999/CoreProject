@@ -286,4 +286,11 @@ class dataBaseC():
 
         return response
 
+#     def updatcourse(self):
+#         collection = self._db["Room"]
+#         collection.update_many({}, {"$set": {"name": "مختبر"}}, upsert=False, array_filters=None)
+#
+#
+# d = dataBaseC().updatcourse()
+
 

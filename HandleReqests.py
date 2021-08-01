@@ -67,8 +67,8 @@ def redirect_getMaterialsOfDepartment():
 @app.route("/getRoomsofDep", methods=['GET'])
 def redirect_getRoomsofDep():
     idDep = request.args.get('idDep')
-    url = "https://virtual-grad.herokuapp.com/getRoomsofDep"
-    # url = "http://127.0.0.1:5000/getRoomsofDep"
+    # url = "https://virtual-grad.herokuapp.com/getRoomsofDep"
+    url = "http://127.0.0.1:5000/getRoomsofDep"
     url += "?idDep=" + idDep
     return redirect(url)
 
@@ -134,7 +134,7 @@ def addRoomToDepartment():
     name = request.args.get('name')
     data1 = dataBaseC()
     data1.add_room(idDep, number, type, campous, name)
-    url = "http://127.0.0.1:3500/addRoomToDepartment"
+    url = "https://virtual-grad.herokuapp.com/addRoomToDepartment"
     url += "?idDep=" + idDep
     url += "&number=" + number
     url += "&type=" + type
@@ -253,7 +253,13 @@ def getTables():
     response = dataBaseC().get_tables_table(idDep)
     return jsonify({'response': response})
 
-
+@app.route("/wafaa", methods=['POST'])
+def wafaa():
+    response = []
+    name  = request.form['name']
+    num = request.form['num']
+    print(name)
+    return jsonify({'response': response})
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3015)
