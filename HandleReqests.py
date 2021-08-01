@@ -67,8 +67,8 @@ def redirect_getMaterialsOfDepartment():
 @app.route("/getRoomsofDep", methods=['GET'])
 def redirect_getRoomsofDep():
     idDep = request.args.get('idDep')
-    # url = "https://virtual-grad.herokuapp.com/getRoomsofDep"
-    url = "http://127.0.0.1:5000/getRoomsofDep"
+    url = "https://virtual-grad.herokuapp.com/getRoomsofDep"
+    # url = "http://127.0.0.1:5000/getRoomsofDep"
     url += "?idDep=" + idDep
     return redirect(url)
 
