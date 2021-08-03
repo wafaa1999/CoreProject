@@ -206,8 +206,10 @@ def deleteFromSaveMatOfDraft():
 @app.route("/getFromDraft", methods=['GET'])
 def getFromDraft():
     idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+
     db = dataBaseC()
-    response = db.get_course_from_draft(idDep)
+    response = db.get_course_from_draft(idDep, tableName)
     return jsonify({'response': response})
 
 @app.route("/getAllDep", methods=['GET'])
