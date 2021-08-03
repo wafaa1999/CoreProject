@@ -254,13 +254,21 @@ def getTables():
     response = dataBaseC().get_tables_table(idDep)
     return jsonify({'response': response})
 
-@app.route("/wafaa", methods=['POST'])
-def wafaa():
-    response = []
-    name  = request.form['name']
-    num = request.form['num']
-    print(name)
-    return jsonify({'response': response})
+# @app.route("/wafaa", methods=['POST'])
+# def wafaa():
+#     response = []
+#     name  = request.form['name']
+#     num = request.form['num']
+#     print(name)
+#     return jsonify({'response': response})
+
+@app.route("/getRoomCat", methods=['GET'])
+def getRoomCat():
+    idDep = request.args.get('idDep')
+    url = "https://virtual-grad.herokuapp.com/getRoomCat"
+    # url = "http://127.0.0.1:3500/getRoomCat"
+    url += '?idDep=' + idDep
+    return redirect(url)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3015)
