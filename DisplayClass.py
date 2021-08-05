@@ -18,7 +18,19 @@ def print_schedule_as_table(schedule):
     table = prettytable.PrettyTable(
         ['Class #', 'Course (number, type)', 'Room (type)', 'Instructor (Id)', 'Meeting Time (Id)'])
     for i in range(0, len(classes)):
-        if not classes[i].get_course().get_from_other_department():
+        if classes[i].get_course().get_from_other_department():
+
+            table.add_row([str(i), classes[i].get_course().get_name() + " (" +
+                           classes[i].get_course().get_number() + ", " +
+                           str(classes[i].get_course().get_type()) + ")",
+                           "من خارج القسم",
+                           "من خارج القسم",
+                           str(classes[i].get_meeting_time().get_start()) + ":" + str(
+                               classes[i].get_meeting_time().get_end()) +
+                           str(classes[i].get_meeting_time().get_days()) + " (" +
+                           str(classes[i].get_meeting_time().get_id()) + ")"])
+
+        else:
             table.add_row([str(i), classes[i].get_course().get_name() + " (" +
                            classes[i].get_course().get_number() + ", " +
                            str(classes[i].get_course().get_type()) + ")",
@@ -29,6 +41,7 @@ def print_schedule_as_table(schedule):
                                classes[i].get_meeting_time().get_end()) +
                            str(classes[i].get_meeting_time().get_days()) + " (" +
                            str(classes[i].get_meeting_time().get_id()) + ")"])
+
     print(table)
     # instructor_ID , days , start time ,end time , is_wanted , weight
 

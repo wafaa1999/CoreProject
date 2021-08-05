@@ -4,7 +4,7 @@ from GeneticClass import GeneticAlgorithm
 from PopulationClass import Population
 from SoftConstrainsClass import SoftConstrains
 
-POPULATION_SIZE = 15
+POPULATION_SIZE = 2
 
 
 def checkIfEq(schedule1, schedule2):
@@ -79,8 +79,10 @@ class Solve:
         print_generation(population)
         for f in range(len(self._listOfGeneration)):
             print_schedule_as_table(self._listOfGeneration[f])
-        SoftCon = SoftConstrains(self._data, self._listOfGeneration, self.soft)
-        print_schedule_as_table(SoftCon)
+
+
+        # SoftCon = SoftConstrains(self._data, self._listOfGeneration, self.soft)
+        # print_schedule_as_table(SoftCon)
 
     def cal(self, sch):
         counter = 0

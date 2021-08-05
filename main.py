@@ -15,26 +15,26 @@ class MainSolving:
                ROOMS.append([result[i]['number'], result[i]['name']])
 
         #INSTRUCTORS
-        result = data.get_istn()
+        result1 = data.get_istn()
         for i in range(len(result)):
-            if result[i]['idDepartment'] == idDep:
-               INSTRUCTORS.append([str(result[i]['_id']), result[i]['name'], False])
+            if result1[i]['idDepartment'] == idDep:
+               INSTRUCTORS.append([str(result1[i]['_id']), result1[i]['name'], False])
 
 
 
 
 
-        MEETING_TIMES_1 = [["MT1", 8, 9, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT2", 9, 10, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT3", 10, 11, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT4", 11, 12, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT5", 13, 14, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT6", 14, 15, ["Sunday", "Tuesday", "Thursday"]],
-                           ["MT7", 8, 9.5, ["Monday", "Wednesday"]],
-                           ["MT8", 9.5, 11, ["Monday", "Wednesday"]],
-                           ["MT9", 11, 12.5, ["Monday", "Wednesday"]],
-                           ["MT10", 12.5, 14, ["Monday", "Wednesday"]],
-                           ["MT11", 14, 15.5, ["Monday", "Wednesday"]],
+        MEETING_TIMES_1 = [["MT1", 8, 9, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT2", 9, 10, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT3", 10, 11, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT4", 11, 12, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT5", 13, 14, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT6", 14, 15, ["احد", "ثلاثاء", "خميس"]],
+                           ["MT7", 8, 9.5, ["اثنين", "اربعاء"]],
+                           ["MT8", 9.5, 11, ["اثنين", "اربعاء"]],#09:30
+                           ["MT9", 11, 12.5, ["اثنين", "اربعاء"]],
+                           ["MT10", 12.5, 14, ["اثنين", "اربعاء"]],
+                           ["MT11", 14, 15.5, ["اثنين", "اربعاء"]],
                            ]
 
         # MEETING_TIMES_1 = [["MT1", 8, 9.5, ["Saturday", "Tuesday"]],
@@ -56,21 +56,21 @@ class MainSolving:
         #                    ["MT15", 14, 15.5, ["Monday", "Thursday"]],
         #                    ]
 
-        MEETING_TIMES_2 = [["MT16", 8, 11, ["Sunday"]], ["MT17", 11, 14, ["Sunday"]],
-                           ["MT18", 8, 11, ["Monday"]], ["MT19", 11, 14, ["Monday"]],
-                           ["MT20", 8, 11, ["Tuesday"]], ["MT21", 11, 14, ["Tuesday"]],
-                           ["MT22", 8, 11, ["Wednesday"]], ["MT23", 11, 14, ["Wednesday"]],
-                           ["MT24", 8, 11, ["Thursday"]], ["MT25", 11, 14, ["Thursday"]],
+        MEETING_TIMES_2 = [["MT16", 8, 11, ["احد"]], ["MT17", 11, 14, ["احد"]],
+                           ["MT18", 8, 11, ["اثنين"]], ["MT19", 11, 14, ["اثنين"]],
+                           ["MT20", 8, 11, ["ثلاثاء"]], ["MT21", 11, 14, ["ثلاثاء"]],
+                           ["MT22", 8, 11, ["اربعاء"]], ["MT23", 11, 14, ["اربعاء"]],
+                           ["MT24", 8, 11, ["خميس"]], ["MT25", 11, 14, ["خميس"]],
                            ]
 
-        MEETING_TIMES_LABS = [["MT26", 14, 17, ["Sunday"]],
-                              ["MT27", 14, 17, ["Monday"]],
-                              ["MT28", 14, 17, ["Tuesday"]],
-                              ["MT29", 14, 17, ["Wednesday"]],
-                              ["MT30", 14, 17, ["Thursday"]]]
+        MEETING_TIMES_LABS = [["MT26", 14, 17, ["احد"]],
+                              ["MT27", 14, 17, ["اثنين"]],
+                              ["MT28", 14, 17, ["ثلاثاء"]],
+                              ["MT29", 14, 17, ["اربعاء"]],
+                              ["MT30", 14, 17, ["خميس"]]]
 
-        MEETING_TIMES_3 = [["MT27", 8, 9, ["Sunday", "Tuesday"]],
-                           ["MT28", 9, 10, ["Sunday", "Tuesday"]]]
+        MEETING_TIMES_3 = [["MT27", 8, 9, ["احد", "ثلاثاء"]],
+                           ["MT28", 9, 10, ["احد", "ثلاثاء"]]]
 
         # INSTRUCTORS = [["I1", "اسماء عفيفي", False],
         #                ["I2", "اشرف عرموش", True],
@@ -90,9 +90,9 @@ class MainSolving:
         #                ]
 
         # instructor_ID , days , start time ,end time , is_wanted , weight
-        SOFT_CONSTRAINTS = [["I1", ["Sunday", "Tuesday"], 8, 9, False, 0.5],
-                            ["I1", ["Sunday", "Tuesday", "Thursday"], 10, 11, False, 1]
-            , ["I3", ["Sunday", "Tuesday"], 8, 9, False, 0.5]]
+        SOFT_CONSTRAINTS = [["I1", ["احد", "ثلاثاء"], 8, 9, False, 0.5],
+                            ["I1", ["احد", "ثلاثاء", "خميس"], 10, 11, False, 1]
+            , ["I3", ["احد", "ثلاثاء"], 8, 9, False, 0.5]]
 
         toSolve = Solve(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
                         SOFT_CONSTRAINTS,idDep, tableName, softFlag)
@@ -102,5 +102,5 @@ class MainSolving:
 
 
 
-# s = MainSolving()
-# s.solveMain('60ddc9735b4d43f8eaaabf83', 'firstSem', 'false')
+s = MainSolving()
+s.solveMain('60ddc9735b4d43f8eaaabf83', 'الفصل الاول', 'false')

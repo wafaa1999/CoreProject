@@ -233,6 +233,7 @@ class dataBaseC():
                 timeSolt=result[i]['timeSolt'],
                 roomType=result[i]['roomType'],
                 courseNumber=result[i]['courseNumber'],
+                duration=result[i]['duration'],
                 specialty=result[i]['specialty'],
                 orignaldep=result[i]['orignaldep'],
 

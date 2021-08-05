@@ -63,6 +63,7 @@ class Data:
         self._coursesOfThirdYears = []
         self._coursesOfFourthYears = []
         self._coursesOfFifthYears = []
+        self._courses = []
         #**************************  تعديل
         self._semester = 1
         # self._department = 1
@@ -95,22 +96,22 @@ class Data:
             self._instructors.append(Instructor(instructorsOfCourses[j][0], instructorsOfCourses[j][1], instructorsOfCourses[j][2]))
         # get courses
         result = self._db.get_course_from_draft(idDep, tableName)
-        courses = []
+        courses1 = []
         for i in range(len(result)):
             flag = True
-            for j in range(len(courses)):
-                if result[i]['name'] == courses[j]['name']:
+            for j in range(len(courses1)):
+                if result[i]['courseName'] == courses1[j]['courseName']:
                     flag = False
             if flag:
-                courses.append(result[i])
+                courses1.append(result[i])
 
-        for k in range(len(courses)):
-            current_course = courses[i]['name']
-            sameCourses = self.get_similar_courses(current_course, courses)
+        for k in range(len(courses1)):
+            current_course = courses1[k]['courseName']
+            sameCourses = self.get_similar_courses(current_course, courses1)
             count = len(sameCourses)
             for w in range(0, count):
 
-                num = (w+1) + "/"+sameCourses[w]['courseNumber']
+                num = str((w+1)) + "/"+sameCourses[w]['courseNumber']
                 numberOfSections = count
                 if sameCourses[w]['duration'] == '3':
                     type = 1
@@ -121,7 +122,7 @@ class Data:
                 name = sameCourses[w]['courseName']
                 dr = sameCourses[w]['courseIns']
                 room = sameCourses[w]['roomType']
-                year = sameCourses[w]['year']
+                year = int(sameCourses[w]['year'])
                 section = w+1
                 sem = sameCourses[w]['semester']
                 if sameCourses[w]['fromOtherDep'] == 'false':
@@ -142,11 +143,11 @@ class Data:
 
                 if type == 2:
                     for m in range(len(self._arrayOfLabs)):
-                        if section == self._arrayOfLabs[m]:
+                        if sameCourses[w]['courseNumber'] == self._arrayOfLabs[m]:
                             flag = False
                             break
                     if flag:
-                        self._arrayOfLabs.append(section)
+                        self._arrayOfLabs.append(sameCourses[w]['courseNumber'])
                         self._numberOfLabs.append(numberOfSections)
 
                 for j in range(0, len(self._instructors)):
@@ -156,33 +157,30 @@ class Data:
                 # self, number, numberType, name, instructors, type, year, sectionNumber, totalNumberOfSections, semester,
                 #                  fromOtherDepartment, sharedTimeslot, forOtherDepartment, departmentName)
                 if fromotherDepartement and not toOtherDepartment:
-                    course1 = Course(num, type, name, 0, 0, year, section, numberOfSections, sem, True, timeSlot, False,
+                    course7 = Course(num, type, name, 0, 0, year, section, numberOfSections, sem, True, timeSlot, False,
                                      departmentName)
                 elif not fromotherDepartement and not toOtherDepartment:
-                    course1 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, 0,
+                    course7 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, 0,
                                      False, departmentName)
                 else:
-                    course1 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, timeSlot, True,
+                    course7 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, timeSlot, True,
                                      departmentName)  # بدنا تايم سلوت
 
-                self._courses.append(course1)
+                self._courses.append(course7)
+
                 if year == 1:
-                    self._coursesOfFirstYears.append(course1)
+                    self._coursesOfFirstYears.append(course7)
                 elif year == 2:
-                    self._coursesOfSecondYears.append(course1)
+                    self._coursesOfSecondYears.append(course7)
                 elif year == 3:
-                    self._coursesOfThirdYears.append(course1)
+                    self._coursesOfThirdYears.append(course7)
                 elif year == 4:
-                    self._coursesOfFourthYears.append(course1)
-                else:
-                    self._coursesOfFifthYears.append(course1)
+                    self._coursesOfFourthYears.append(course7)
+                elif year == 5:
+                    self._coursesOfFifthYears.append(course7)
                     var1 = []
 
-
-
-
-
-            # data1 = pd.read_excel("b1.xlsx")
+        # data1 = pd.read_excel("b1.xlsx")
         # self._courses = []
         # num1 = data1['num']
         # numberOfSections1 = data1['sum']
@@ -259,7 +257,7 @@ class Data:
     def get_similar_courses(self, current_course, courses):
         course = []
         for i in range(len(courses)):
-            if current_course == courses[i]['name']:
+            if current_course == courses[i]['courseName']:
                 course.append(courses[i])
 
         return course

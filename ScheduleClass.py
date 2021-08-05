@@ -6,25 +6,42 @@ def find_shared_time_slot(course, data):
     answer = []
     time = course.get_shared_time_slot().split("/")
     if course.get_number_type() == 1:
+        time11 = time[0].split(':')
+        if time11[1] == '00':
+            time[0] = int(time11[0])
+        else:
+            time[0] = int(time11[0]) + 0.5
+        time112 = time[1].split(':')
+        if time112[1] == '00':
+            time[1] = int(time112[0])
+        else:
+            time[1] = int(time112[0]) + 0.5
+
+
         for i in range(len(data.get_meeting_times_1())):
-            if data.get_meeting_times_1()[i].get_start() == int(time[0]) and \
-                    data.get_meeting_times_1()[i].get_end() == int(time[1]):
+            x = data.get_meeting_times_1()[i]
+            if data.get_meeting_times_1()[i].get_start() == time[0] and \
+                    data.get_meeting_times_1()[i].get_end() == time[1]:
                 days = time[2].split(",")
-                if days[0] == data.get_meeting_times_1()[0].get_days()[0]:
+                # print(days[0])
+                # print(data.get_meeting_times_1()[i].get_days()[0])
+                if days[0] == data.get_meeting_times_1()[i].get_days()[0]:
                     answer.append(data.get_meeting_times_1()[i])
+
+                    ######
     elif course.get_number_type() == 2:
         for i in range(len(data.get_meeting_times_2())):
-            if data.get_meeting_times_2()[i].get_start() == int(time[0]) and \
-                    data.get_meeting_times_2()[i].get_end() == int(time[1]):
+            if data.get_meeting_times_2()[i].get_start() == time[0] and \
+                    data.get_meeting_times_2()[i].get_end() == time[1]:
                 days = time[2].split(",")
-                if days[0] == data.get_meeting_times_2()[0].get_days()[0]:
+                if days[0] == data.get_meeting_times_2()[i].get_days()[0]:
                     answer.append(data.get_meeting_times_21()[i])
     elif course.get_number_type() == 3:
         for i in range(len(data.get_meeting_times_3())):
-            if data.get_meeting_times_3()[i].get_start() == int(time[0]) and data.get_meeting_times_3()[i].get_end() == \
-                    int(time[1]):
+            if data.get_meeting_times_3()[i].get_start() == time[0] and data.get_meeting_times_3()[i].get_end() == \
+                    time[1]:
                 days = time[2].split(",")
-                if days[0] == data.get_meeting_times_3()[0].get_days()[0]:
+                if days[0] == data.get_meeting_times_3()[i].get_days()[0]:
                     answer.append(data.get_meeting_times_3()[i])
     return answer
 
@@ -128,6 +145,8 @@ class Schedule:
         courses = self._data.get_courses()
 
         for j in range(0, len(courses)):
+            if(j == 7):
+                print("hi")
             newclass = Class(self._classNumb, courses[j])
             self._classNumb += 1
             newclass.set_instructor(courses[j].get_instructors())
@@ -141,9 +160,13 @@ class Schedule:
 
                 newclass.set_meeting_time(answer)
             else:
-                while counterOne < 30:
+                if courses[j].get_for_other_department():
+                    answer = find_shared_time_slot(courses[j], self._data)[0]
+                    newclass.set_meeting_time(answer)
+
+                while counterOne < 30 and not courses[j].get_for_other_department():
                     counterOne += 1
-                    if x == 1:
+                    if x == 1 :
                         newclass.set_meeting_time(
                             self._data.get_meeting_times_1()[rnd.randrange(0, len(self._data.get_meeting_times_1()))])
                     if x == 2:
