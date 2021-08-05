@@ -220,6 +220,7 @@ class dataBaseC():
                result.append(i)
 
         for i in range(len(result)):
+
             row = dict(
                 tableName=result[i]['tableName'],
                 depId=result[i]['depId'],
@@ -231,7 +232,7 @@ class dataBaseC():
                 toOtherDep=result[i]['toOtherDep'],
                 timeSolt=result[i]['timeSolt'],
                 roomType=result[i]['roomType'],
-                courseNumber=result[i]['number'],
+                courseNumber=result[i]['courseNumber'],
                 specialty=result[i]['specialty'],
                 orignaldep=result[i]['orignaldep'],
 
@@ -306,10 +307,10 @@ class dataBaseC():
         return response
 
 #     def updatcourse(self):
-#         collection = self._db["Room"]
-#         collection.update_many({}, {"$set": {"name": "مختبر"}}, upsert=False, array_filters=None)
+#         collection = self._db["SavedMaterial"]
+#         collection.update_many({}, {"$set": {"specialty": "هندسة حاسوب"}}, upsert=False, array_filters=None)
 #
 #
 # d = dataBaseC().updatcourse()
-
-
+#
+#
