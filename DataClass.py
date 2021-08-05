@@ -1,5 +1,6 @@
 import pandas as pd
 from CourseClass import *
+from DataBaseConnection import dataBaseC
 from InstructorClass import *
 from MeetingTimeClass import *
 from RoomClass import *
@@ -46,7 +47,8 @@ def add_courses(courses):
 class Data:
 
     def __init__(self, allRooms, meetingTimesOne, meetingTimesLab, meetingTimesThree, instructorsOfCourses,
-                 meetingTimesTwo):
+                 meetingTimesTwo, idDep, tableName):
+        self._db = dataBaseC()
         self._meetingTimesLabs = []
         self._rooms = []
         self._meetingTimes1 = []
@@ -61,8 +63,9 @@ class Data:
         self._coursesOfThirdYears = []
         self._coursesOfFourthYears = []
         self._coursesOfFifthYears = []
+        #**************************  تعديل
         self._semester = 1
-        self._department = 1
+        # self._department = 1
 
         self._softConstraints = [["I1", ["Sunday", "Tuesday"], 8, 9, False, 0.5],
                                  ["I1", ["Sunday", "Tuesday", "Thursday"], 10, 11, False, 1],
@@ -90,72 +93,109 @@ class Data:
                             meetingTimesThree[j][3]))
         for j in range(0, len(instructorsOfCourses)):
             self._instructors.append(Instructor(instructorsOfCourses[j][0], instructorsOfCourses[j][1], instructorsOfCourses[j][2]))
-
-        data1 = pd.read_excel("b1.xlsx")
-        self._courses = []
-        num1 = data1['num']
-        numberOfSections1 = data1['sum']
-        type1 = data1['type']
-        name1 = data1['name']
-        dr1 = data1['dr']
-        room1 = data1['room']
-        year1 = data1['year']
-        sem1 = data1['sem']
-        flagDepartment1 = data1['dep']
-        timeSlot1 = data1['timeslot']
-        toOtherDepartment1 = data1['todep']
-        departmentName1 = data1['depN']
-
-        for w in range(0, len(data1)):
-            num = num1[w]
-            numberOfSections = numberOfSections1[w]
-            type = type1[w]
-            name = name1[w]
-            dr = dr1[w]
-            room = room1[w]
-            year = year1[w]
-            num2 = num.split("/")
-            sem = sem1[w]
-            fromotherDepartement = flagDepartment1[w] # من ديبارتمنت تاني
-            timeSlot = timeSlot1[w]
-            toOtherDepartment = toOtherDepartment1[w] # مساق من عندي لحدا تاني
-            departmentName = departmentName1[w]
+        # get courses
+        result = self._db.get_course_from_draft(idDep, tableName)
+        courses = []
+        for i in range(len(result)):
             flag = True
+            for j in range(len(courses)):
+                if result[i]['name'] == courses[j]['name']:
+                    flag = False
+            if flag:
+                courses.append(result[i])
 
-            if type == 2:
-                for m in range(len(self._arrayOfLabs)):
-                    if num2[1] == self._arrayOfLabs[m]:
-                        flag = False
+        for k in range(len(courses)):
+            current_course = courses[i]['name']
+            sameCourses = self.get_similar_courses(current_course, courses)
+            count = len(sameCourses)
+            for w in range(0, count):
+
+                num = (w+1) + "/"+sameCourses[w]['courseNumber']
+                numberOfSections = count
+                if sameCourses[w]['duration'] == '3':
+                    type = 1
+                elif sameCourses[w]['duration'] == '1':
+                    type = 2
+                elif sameCourses[w]['duration'] == '2':
+                    type = 3
+                name = sameCourses[w]['courseName']
+                dr = sameCourses[w]['courseIns']
+                room = sameCourses[w]['roomType']
+                year = sameCourses[w]['year']
+                section = w+1
+                sem = sameCourses[w]['semester']
+                if sameCourses[w]['fromOtherDep'] == 'false':
+                    fromotherDepartement = False
+                else:
+                    fromotherDepartement = True
+
+                if sameCourses[w]['toOtherDep'] == 'false':
+                    toOtherDepartment = False
+                else:
+                    toOtherDepartment = True
+                timeSlot = sameCourses[w]['timeSolt']
+                departmentName = sameCourses[w]['specialty']
+
+
+
+                flag = True
+
+                if type == 2:
+                    for m in range(len(self._arrayOfLabs)):
+                        if section == self._arrayOfLabs[m]:
+                            flag = False
+                            break
+                    if flag:
+                        self._arrayOfLabs.append(section)
+                        self._numberOfLabs.append(numberOfSections)
+
+                for j in range(0, len(self._instructors)):
+                    if self._instructors[j].get_name() == dr:
+                        instr = self._instructors[j]
                         break
-                if flag:
-                    self._arrayOfLabs.append(num2[1])
-                    self._numberOfLabs.append(numberOfSections)
+                # self, number, numberType, name, instructors, type, year, sectionNumber, totalNumberOfSections, semester,
+                #                  fromOtherDepartment, sharedTimeslot, forOtherDepartment, departmentName)
+                if fromotherDepartement and not toOtherDepartment:
+                    course1 = Course(num, type, name, 0, 0, year, section, numberOfSections, sem, True, timeSlot, False,
+                                     departmentName)
+                elif not fromotherDepartement and not toOtherDepartment:
+                    course1 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, 0,
+                                     False, departmentName)
+                else:
+                    course1 = Course(num, type, name, instr, room, year, section, numberOfSections, sem, False, timeSlot, True,
+                                     departmentName)  # بدنا تايم سلوت
 
-            for j in range(0, len(self._instructors)):
-                if self._instructors[j].get_name() == dr:
-                    instr = self._instructors[j]
-                    break
-            # self, number, numberType, name, instructors, type, year, sectionNumber, totalNumberOfSections, semester,
-            #                  fromOtherDepartment, sharedTimeslot, forOtherDepartment, departmentName)
-            if fromotherDepartement and not toOtherDepartment:
-                course1 = Course(num, type, name, 0, 0, year, num2[0], numberOfSections, sem,True, timeSlot, False,departmentName)
-            elif not fromotherDepartement and not toOtherDepartment:
-                course1 = Course(num, type, name, instr, room, year, num2[0], numberOfSections, sem, False, 0, False, departmentName)
-            else:
-                course1 = Course(num, type, name, instr, room, year, num2[0], numberOfSections, sem, False, 0, True, departmentName) #بدنا تايم سلوت
+                self._courses.append(course1)
+                if year == 1:
+                    self._coursesOfFirstYears.append(course1)
+                elif year == 2:
+                    self._coursesOfSecondYears.append(course1)
+                elif year == 3:
+                    self._coursesOfThirdYears.append(course1)
+                elif year == 4:
+                    self._coursesOfFourthYears.append(course1)
+                else:
+                    self._coursesOfFifthYears.append(course1)
+                    var1 = []
 
-            self._courses.append(course1)
-            if year == 1:
-                self._coursesOfFirstYears.append(course1)
-            elif year == 2:
-                self._coursesOfSecondYears.append(course1)
-            elif year == 3:
-                self._coursesOfThirdYears.append(course1)
-            elif year == 4:
-                self._coursesOfFourthYears.append(course1)
-            else:
-                self._coursesOfFifthYears.append(course1)
-                var1 = []
+
+
+
+
+            # data1 = pd.read_excel("b1.xlsx")
+        # self._courses = []
+        # num1 = data1['num']
+        # numberOfSections1 = data1['sum']
+        # type1 = data1['type']
+        # name1 = data1['name']
+        # dr1 = data1['dr']
+        # room1 = data1['room']
+        # year1 = data1['year']
+        # sem1 = data1['sem']
+        # flagDepartment1 = data1['dep']
+        # timeSlot1 = data1['timeslot']
+        # toOtherDepartment1 = data1['todep']
+        # departmentName1 = data1['depN']
 
         var1 = course_choose(self._coursesOfFirstYears)
         for i in range(len(var1)):
@@ -177,7 +217,7 @@ class Data:
         for i in range(len(var5)):
             self._coursesOfYears[4].append(var5[i])
 
-        self._numberOfClasses = len(data1)
+        self._numberOfClasses = len(result)
         add_courses(self._courses)
 
     def get_rooms(self):
@@ -215,3 +255,11 @@ class Data:
 
     def get_soft_constraints(self):
         return self._softConstraints
+
+    def get_similar_courses(self, current_course, courses):
+        course = []
+        for i in range(len(courses)):
+            if current_course == courses[i]['name']:
+                course.append(courses[i])
+
+        return course

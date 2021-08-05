@@ -28,6 +28,13 @@ class dataBaseC():
             }
             result = collection.insert_one(row)
 
+    def get_istn(self):
+        collection = self._db.Inst
+        result = []
+        for i in collection.find():
+            result.append(i)
+        return result
+
 
 
     def update_data_for_room(self, idDep, number, campous, type, name):
@@ -54,7 +61,7 @@ class dataBaseC():
                 return 'True'
         return 'False'
 
-    def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments):
+    def add_course_to_dep(self, idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments, specialty):
         response = []
         flag1 = True
         if flag == '0':
@@ -84,6 +91,8 @@ class dataBaseC():
                 "toDepartments": toDepartments,
                 "flagFrom": flagFrom,
                 "flagTo": flagTo,
+                "specialty":specialty,
+
             }
 
             result = collection.insert_one(row)
@@ -132,6 +141,10 @@ class dataBaseC():
                     "duration": result[j]['courseHours'],
                     "roomType": roomType,
                     "date": date,
+                    "courseNumber": result[j]['number'],
+                    "specialty": result[j]['specialty'],
+                    "orignaldep":result[j]['idDepartment'],
+
                 }
 
                 result = collection2.insert_one(row)
@@ -217,10 +230,16 @@ class dataBaseC():
                 fromOtherDep=result[i]['fromOtherDep'],
                 toOtherDep=result[i]['toOtherDep'],
                 timeSolt=result[i]['timeSolt'],
-                roomType=result[i]['roomType'])
+                roomType=result[i]['roomType'],
+                courseNumber=result[i]['number'],
+                specialty=result[i]['specialty'],
+                orignaldep=result[i]['orignaldep'],
+
+            )
             response.append(row)
 
         return response
+
 
     def add_table(self, idDep, name, year, semester, status):
         response = []

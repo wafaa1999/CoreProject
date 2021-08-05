@@ -21,9 +21,9 @@ def checkIfEq(schedule1, schedule2):
 class Solve:
 
     def __init__(self, ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
-                 SOFT_CONSTRAINTS):
+                 SOFT_CONSTRAINTS, idDep, tableName, softFlag):
         self._listOfGeneration = []
-        self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2)
+        self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName)
         self.soft = SoftConstrains
 
     def solve(self):

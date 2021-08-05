@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, redirect, request
 from flask_cors import CORS
+
+from main import MainSolving
 from reqest import req
 
 from DataBaseConnection import dataBaseC
@@ -102,8 +104,9 @@ def redirect_addCourseToDepartment():
     sem = request.args.get('sem')
     flag = request.args.get('flag')
     toDepartments = request.args.get('toDepartments')
+    specialty = request.args.get('specialty')
     data2 = dataBaseC()
-    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments)
+    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments, specialty)
     url = "https://virtual-grad.herokuapp.com/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
@@ -113,7 +116,8 @@ def redirect_addCourseToDepartment():
     url += "year=" + year + "&"
     url += "sem=" + sem + "&"
     url += "flag=" + flag + "&"
-    url += "toDepartments=" + toDepartments
+    url += "toDepartments=" + toDepartments + "&"
+    url += "specialty=" + specialty
     return redirect(url)
 
 
@@ -271,6 +275,14 @@ def getRoomCat():
     # url = "http://127.0.0.1:3500/getRoomCat"
     url += '?idDep=' + idDep
     return redirect(url)
+
+# @app.route("/runCore", methods=['GET'])
+# def runCore():
+#     idDep = request.args.get('idDep')
+#     tableName = request.args.get('tableName')
+#     softFalg = request.args.get('softFlag')
+#     solve = MainSolving()
+#     result = solve.solveMain(idDep, tableName, softFalg)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3015)
