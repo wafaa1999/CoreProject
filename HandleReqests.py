@@ -221,12 +221,6 @@ def getAllDep():
     url = "https://virtual-grad.herokuapp.com/getAllDep"
     return redirect(url)
 
-# @app.route("/testingPost", methods=['POST'])
-# def testu():
-#     list = request
-#     print("WAfaa")
-#     return "true"
-
 @app.route("/getMatOfSpeDep", methods=['GET'])
 def getMatOfSpeDep():
     idDep = request.args.get('idDep')
@@ -289,6 +283,18 @@ def redirect_addInstToDepartment():
     url = "https://virtual-grad.herokuapp.com/addInstToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name
+    return redirect(url)
+
+
+@app.route("/deleteInsFromDep", methods=['GET'])
+def deleteInstFromDep():
+    idDep = request.args.get('idDep')
+    name = request.args.get('name')
+    data3 = dataBaseC()
+    data3.delete_inst_from_dep(idDep, name)
+    url = "https://virtual-grad.herokuapp.com/deleteRoomFromDep"
+    url += "?idDep=" + idDep
+    url += "&number=" + name
     return redirect(url)
 
 

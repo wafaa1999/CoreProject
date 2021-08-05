@@ -324,6 +324,18 @@ class dataBaseC():
         response.append(row)
         return  response
 
+    def delete_inst_from_dep(self, idDep, name):
+        response = []
+        collection = self._db.Inst
+
+        collection.delete_one({"idDep": idDep,
+                               "name": name
+                               })
+        row = {
+            "flag": 'true', }
+        response.append(row)
+        return response
+
 
     def delete_table(self, idDep, name):
         response = []
@@ -337,6 +349,8 @@ class dataBaseC():
             "flag": 'true', }
         response.append(row)
         return response
+
+
 
 
     def get_tables_table(self, idDep):
