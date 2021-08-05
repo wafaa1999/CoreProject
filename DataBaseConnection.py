@@ -14,6 +14,52 @@ class dataBaseC():
             result.append(i)
         return result
 
+    def store_in_database(self, population, tableName, idDep):
+        classes = population.get_schedules()[0].get_classes()
+        collection = self._db.finalTable
+        for i in range(len(classes)):
+            time = classes[i].get_meeting_time().get_start()
+            time2 = classes[i].get_meeting_time().get_end()
+            if time > int(time):
+                startTime = str(int(time)) + ":30"
+            else:
+                startTime = str(int(time)) + ":00"
+
+            if time2 > int(time2):
+                endTime = str(int(time2)) + ":30"
+            else:
+                endTime = str(int(time2)) + ":00"
+            allDays = ""
+            for j in range(len(classes[i].get_meeting_time().get_days())):
+                allDays += classes[i].get_meeting_time().get_days()[j]
+                if j < len(classes[i].get_meeting_time().get_days()) - 1:
+                    allDays += ','
+            inst = "من قسم اخر"
+            room = "من قسم اخر"
+            year = "لقسم اخر"
+            type = "من قسم اخر"
+
+            if not classes[i].get_course().get_from_other_department():
+                inst = classes[i].get_instructor().get_name()
+                room = classes[i].get_room().get_number()
+                type = classes[i].get_room().get_type()
+            if not classes[i].get_course().get_for_other_department():
+                year = classes[i].get_course().get_year()
+
+            row = {
+                "courseNumber": classes[i].get_course().get_number(),
+                "courseName": classes[i].get_course().get_name(),
+                "days": allDays,
+                "startHour": startTime,
+                "endHour": endTime,
+                "roomNumber": room,
+                "instName": inst,
+                "year": year,
+                "tableName": tableName,
+                "idDep": idDep,
+                "roomType": type,
+            }
+            result = collection.insert_one(row)
 
     def add_room(self,idDep, number, type, campous, name):
         flag = self.check_room(number)
@@ -27,6 +73,14 @@ class dataBaseC():
                 "name": name
             }
             result = collection.insert_one(row)
+
+    def add_inst_to_dep(self, idDep, name):
+        collection = self._db.Inst
+        row = {
+            "idDepartment": idDep,
+            "name": name
+        }
+        result = collection.insert_one(row)
 
     def get_istn(self):
         collection = self._db.Inst

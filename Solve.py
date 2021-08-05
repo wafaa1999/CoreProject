@@ -1,3 +1,4 @@
+from DataBaseConnection import dataBaseC
 from DataClass import Data
 from DisplayClass import DisplayMgr, print_schedule_as_table, print_generation
 from GeneticClass import GeneticAlgorithm
@@ -23,6 +24,8 @@ class Solve:
     def __init__(self, ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
                  SOFT_CONSTRAINTS, idDep, tableName, softFlag):
         self._listOfGeneration = []
+        self._tableName = tableName
+        self._idDep = idDep
         self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName)
         self.soft = SoftConstrains
 
@@ -77,6 +80,7 @@ class Solve:
                 #         self._listOfGenaration.append(population.get_schedules()[0])
                 # print("number of diff results =" + str(len(self._listOfGenaration)))
         print_generation(population)
+        dataBaseC().store_in_database(population, self._tableName, self._idDep)
         for f in range(len(self._listOfGeneration)):
             print_schedule_as_table(self._listOfGeneration[f])
 

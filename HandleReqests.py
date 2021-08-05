@@ -254,19 +254,13 @@ def deleteTable():
     response = dataBaseC().delete_table(idDep, name)
     return jsonify({'response': response})
 
+
 @app.route("/getTables", methods=['GET'])
 def getTables():
     idDep = request.args.get('idDep')
     response = dataBaseC().get_tables_table(idDep)
     return jsonify({'response': response})
 
-# @app.route("/wafaa", methods=['POST'])
-# def wafaa():
-#     response = []
-#     name  = request.form['name']
-#     num = request.form['num']
-#     print(name)
-#     return jsonify({'response': response})
 
 @app.route("/getRoomCat", methods=['GET'])
 def getRoomCat():
@@ -276,13 +270,31 @@ def getRoomCat():
     url += '?idDep=' + idDep
     return redirect(url)
 
-# @app.route("/runCore", methods=['GET'])
-# def runCore():
-#     idDep = request.args.get('idDep')
-#     tableName = request.args.get('tableName')
-#     softFalg = request.args.get('softFlag')
-#     solve = MainSolving()
-#     result = solve.solveMain(idDep, tableName, softFalg)
+@app.route("/runCore", methods=['GET'])
+def runCore():
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    softFalg = request.args.get('softFlag')
+    solve = MainSolving()
+    solve.solveMain(idDep, tableName, softFalg)
+    response = [1]
+    return jsonify({'response': response})
+
+@app.route("/addInstToDepartment", methods=['GET'])
+def redirect_addInstToDepartment():
+    idDep = request.args.get('idDep')
+    name = request.args.get('name')
+    number = request.args.get('number')
+    data2 = dataBaseC()
+    data2.add_inst_to_dep(idDep, name)
+    url = "https://virtual-grad.herokuapp.com/addInstToDepartment?"
+    url += "idDep=" + idDep + "&"
+    url += "name=" + name
+    return redirect(url)
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3015)
