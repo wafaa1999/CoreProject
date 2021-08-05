@@ -270,8 +270,8 @@ def getRoomCat():
     url += '?idDep=' + idDep
     return redirect(url)
 
-@app.route("/runCore", methods=['GET'])
-def runCore():
+@app.route("/genarateTable", methods=['GET'])
+def genarateTable():
     idDep = request.args.get('idDep')
     tableName = request.args.get('tableName')
     softFalg = request.args.get('softFlag')
@@ -284,13 +284,13 @@ def runCore():
 def redirect_addInstToDepartment():
     idDep = request.args.get('idDep')
     name = request.args.get('name')
-    number = request.args.get('number')
     data2 = dataBaseC()
     data2.add_inst_to_dep(idDep, name)
     url = "https://virtual-grad.herokuapp.com/addInstToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name
     return redirect(url)
+
 
 
 
