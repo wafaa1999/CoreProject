@@ -292,7 +292,7 @@ def deleteInstFromDep():
     name = request.args.get('name')
     data3 = dataBaseC()
     data3.delete_inst_from_dep(idDep, name)
-    url = "https://virtual-grad.herokuapp.com/deleteInsFromDep"
+    url = "http://127.0.0.1:3500/deleteInsFromDep"
     url += "?idDep=" + idDep
     url += "&number=" + name
     return redirect(url)
