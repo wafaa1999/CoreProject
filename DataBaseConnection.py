@@ -41,7 +41,7 @@ class dataBaseC():
                     semester=i['semester'],
                     date=i['date'],
                     courseTimes=i['courseTimes'],
-                    labsTimes=i['courseTimes'],
+                    labsTimes=i['labsTimes'],
 
 
                 )
