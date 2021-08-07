@@ -24,17 +24,30 @@ class Solve:
     def __init__(self, ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
                  SOFT_CONSTRAINTS, idDep, tableName, softFlag):
         self._listOfGeneration = []
+        self._sofFlag = softFlag
         self._tableName = tableName
         self._idDep = idDep
         self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName)
-        self.soft = SoftConstrains
+        self.soft = SOFT_CONSTRAINTS
+
+    def cal_soft(self):
+        SoftCon1 = SoftConstrains(self._data, self._listOfGeneration, self.soft)
+        table = SoftCon1.check_for_soft_con()
+        print("final Sch")
+        print_schedule_as_table(table)
+        dataBaseC().store_in_database(table, self._tableName, self._idDep)
 
     def solve(self):
+
+        if self._sofFlag == 'false':
+            var = 1
+        else:
+            var = 100
         counter1 = 0
         counter2 = 0
         counter = 0
         currentState = 0
-        for i in range(0, 1):
+        for i in range(0, var):
             flag = False
             displayMgr = DisplayMgr(self._data)
             generationNumber = 0
@@ -44,6 +57,20 @@ class Solve:
             population.get_schedules().sort(key=lambda x1: x1.get_fitness(), reverse=True)
             geneticAlgorithm = GeneticAlgorithm(self._data)
             print_schedule_as_table(population.get_schedules()[0])
+
+            if population.get_schedules()[0].get_fitness() == 1.0:
+                counter1 += 1
+
+                print("\n> Generation # " + str(generationNumber) + "   i #" + str(i))
+                # if len(self._listOfGeneration) == 0:
+                #     self._listOfGeneration.append((population.get_schedules()[0]))
+                # for w in range(0, len(self._listOfGeneration)):
+                #     FlagForEq = self.checkIfEq(self._listOfGeneration[w], population.get_schedules()[0])
+                #     if FlagForEq:
+                #         break
+                # if not FlagForEq:
+                self._listOfGeneration.append(population.get_schedules()[0])
+
             while population.get_schedules()[0].get_fitness() != 1.0:
                 generationNumber += 1
                 if currentState == population.get_schedules()[0].get_fitness():
@@ -51,9 +78,9 @@ class Solve:
                 else:
                     currentState = population.get_schedules()[0].get_fitness()
                     counter = 0
-                # if counter == 400:
-                # displayMgr.print_schedule_as_table(population.get_schedules()[0])
-                # flag = True
+                #     ********************
+                if counter == 400:
+                     flag = True
 
                 print("\n> Generation # " + str(generationNumber))
                 print("number of results =" + str(counter1))
@@ -66,27 +93,32 @@ class Solve:
                     sec = population.get_schedules()[0]
                     self.cal(sec)
                     print_schedule_as_table(population.get_schedules()[0])
-                # if population.get_schedules()[0].get_fitness() == 1.0 or flag :
-                #     counter1 += 1
-                #
-                #     print("\n> Generation # " + str(generationNumber) + "   i #" + str(i))
-                #     if len(self._listOfGenaration) == 0:
-                #         self._listOfGenaration.append((population.get_schedules()[0]))
-                #     for w in range(0, len(self._listOfGenaration)):
-                #         FlagForEq = self.checkIfEq(self._listOfGenaration[w], population.get_schedules()[0])
-                #         if FlagForEq:
-                #             break
-                #     if not FlagForEq:
-                #         self._listOfGenaration.append(population.get_schedules()[0])
-                # print("number of diff results =" + str(len(self._listOfGenaration)))
-        print_generation(population)
-        dataBaseC().store_in_database(population, self._tableName, self._idDep)
-        for f in range(len(self._listOfGeneration)):
-            print_schedule_as_table(self._listOfGeneration[f])
+
+                if population.get_schedules()[0].get_fitness() == 1.0 or flag:
+                    counter1 += 1
+
+                    print("\n> Generation # " + str(generationNumber) + "   i #" + str(i))
+                    if len(self._listOfGeneration) == 0:
+                        self._listOfGeneration.append((population.get_schedules()[0]))
+                    # for w in range(0, len(self._listOfGeneration)):
+                    #     FlagForEq = self.checkIfEq(self._listOfGeneration[w], population.get_schedules()[0])
+                    #     if FlagForEq:
+                    #         break
+                    # if not FlagForEq:
+                    self._listOfGeneration.append(population.get_schedules()[0])
+                    print("number of diff results =" + str(len(self._listOfGeneration)))
+
+        if self._sofFlag != 'false':
+            self.cal_soft()
+        else:
+           dataBaseC().store_in_database(population.get_schedules()[0], self._tableName, self._idDep)
+
+        # print_generation(population)
+
+        # for f in range(len(self._listOfGeneration)):
+        #     print_schedule_as_table(self._listOfGeneration[f])
 
 
-        # SoftCon = SoftConstrains(self._data, self._listOfGeneration, self.soft)
-        # print_schedule_as_table(SoftCon)
 
     def cal(self, sch):
         counter = 0

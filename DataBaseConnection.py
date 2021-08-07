@@ -14,8 +14,43 @@ class dataBaseC():
             result.append(i)
         return result
 
-    def store_in_database(self, population, tableName, idDep):
-        classes = population.get_schedules()[0].get_classes()
+    def get_times(self, semester, date):
+        collection = self._db.SemesterTime
+        result = []
+        for i in collection.find():
+            if i['semester'] == semester and i['date'] == date:
+                result.append(i)
+                return result
+
+    def add_times(self, semester, date, courseTimes, labsTimes):
+        collection = self._db.SemesterTime
+        row = {
+            "semester": semester,
+            "date": date,
+            "courseTimes": courseTimes,
+            "labsTimes": labsTimes
+        }
+        result = collection.insert_one(row)
+
+    def get_times1(self, semester, date):
+        collection = self._db.SemesterTime
+        response = []
+        for i in collection.find():
+            if i['semester'] == semester and i['date'] == date:
+                row = dict(
+                    semester=i['semester'],
+                    date=i['date'],
+                    courseTimes=i['courseTimes'],
+                    labsTimes=i['courseTimes'],
+
+
+                )
+                response.append(row)
+        return response
+
+
+    def store_in_database(self, table, tableName, idDep):
+        classes = table.get_classes()
         collection = self._db.finalTable
         for i in range(len(classes)):
             time = classes[i].get_meeting_time().get_start()
@@ -82,6 +117,7 @@ class dataBaseC():
         }
         result = collection.insert_one(row)
 
+
     def get_istn(self):
         collection = self._db.Inst
         result = []
@@ -89,7 +125,12 @@ class dataBaseC():
             result.append(i)
         return result
 
-
+    def get_soft_cons(self):
+        collection = self._db.SoftConst
+        result = []
+        for i in collection.find():
+            result.append(i)
+        return result
 
     def update_data_for_room(self, idDep, number, campous, type, name):
         flag = False
@@ -336,6 +377,18 @@ class dataBaseC():
        response.append(row)
        return response
 
+    def delete_Course_from_dep(self, idDep, number):
+        response = []
+        collection = self._db.Course
+
+        result = collection.delete_one({"toDepartments": idDep,
+                                        "number": number})
+        row = {
+            "flag": 'true', }
+        response.append(row)
+        return response
+
+
 
     def delete_table(self, idDep, name):
         response = []
@@ -374,6 +427,9 @@ class dataBaseC():
             response.append(row)
 
         return response
+
+
+
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]

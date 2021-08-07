@@ -68,10 +68,6 @@ class Data:
         self._semester = 1
         # self._department = 1
 
-        self._softConstraints = [["I1", ["Sunday", "Tuesday"], 8, 9, False, 0.5],
-                                 ["I1", ["Sunday", "Tuesday", "Thursday"], 10, 11, False, 1],
-                                 ["I3", ["Sunday", "Tuesday"], 8, 9, False, 0.5]]
-
         for j in range(0, len(allRooms)):
             self._rooms.append(Room(allRooms[j][0], allRooms[j][1]))
         for j in range(0, len(meetingTimesOne)):
@@ -250,9 +246,6 @@ class Data:
 
     def get_number_of_classes(self):
         return self._numberOfClasses
-
-    def get_soft_constraints(self):
-        return self._softConstraints
 
     def get_similar_courses(self, current_course, courses):
         course = []

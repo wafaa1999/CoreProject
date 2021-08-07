@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, redirect, request
 from flask_cors import CORS
 
-from main import MainSolving
+from MainSolvingAlgo import MainSolving
 from reqest import req
 
 from DataBaseConnection import dataBaseC
@@ -15,10 +15,11 @@ cors = CORS(app, resources={
     }
 })
 
+
 @app.route('/test', methods=['Get'])
 def gg():
     response = row = dict(
-            project='Core', )
+        project='Core', )
     return jsonify({'response': response})
 
 
@@ -37,7 +38,7 @@ def firstTime():
     idUser = request.args.get('idUser')
     password = request.args.get('password')
     req1 = req()
-    re = req1.get_dep(idUser,password)
+    re = req1.get_dep(idUser, password)
     row = dict(
         stat=re
     )
@@ -83,7 +84,7 @@ def redirect_editRoom():
     type = request.args.get('type')
     name = request.args.get('name')
     data4 = dataBaseC()
-    data4.update_data_for_room( idDep, number, campous, type, name)
+    data4.update_data_for_room(idDep, number, campous, type, name)
     url = "https://virtual-grad.herokuapp.com/editRoom"
     url += "?idDep=" + idDep
     url += "&number=" + number
@@ -106,7 +107,7 @@ def redirect_addCourseToDepartment():
     toDepartments = request.args.get('toDepartments')
     specialty = request.args.get('specialty')
     data2 = dataBaseC()
-    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem, flag,toDepartments, specialty)
+    data2.add_course_to_dep(idDep, name, number, numberOfHour, type, year, sem, flag, toDepartments, specialty)
     url = "https://virtual-grad.herokuapp.com/addCourseToDepartment?"
     url += "idDep=" + idDep + "&"
     url += "name=" + name + "&"
@@ -147,7 +148,6 @@ def addRoomToDepartment():
     return redirect(url)
 
 
-
 @app.route("/saveMatOfDraft", methods=['GET'])
 def saveMatOfDraft():
     response = []
@@ -160,7 +160,7 @@ def saveMatOfDraft():
     roomType = request.args.get('roomType')
     date = request.args.get('date')
     data1 = dataBaseC()
-    result =data1.save_to_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
+    result = data1.save_to_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
     row = dict(
         stat=result
     )
@@ -187,6 +187,7 @@ def deleteRoomFromDep():
     url += "&number=" + number
     return redirect(url)
 
+
 @app.route("/deleteFromSaveMatOfDraft", methods=['GET'])
 def deleteFromSaveMatOfDraft():
     response = []
@@ -199,7 +200,7 @@ def deleteFromSaveMatOfDraft():
     roomType = request.args.get('roomType')
     date = request.args.get('date')
     data1 = dataBaseC()
-    result =data1.delete_from_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType,date)
+    result = data1.delete_from_draft(tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date)
     row = dict(
         stat=result
     )
@@ -216,10 +217,12 @@ def getFromDraft():
     response = db.get_course_from_draft(idDep, tableName)
     return jsonify({'response': response})
 
+
 @app.route("/getAllDep", methods=['GET'])
 def getAllDep():
     url = "https://virtual-grad.herokuapp.com/getAllDep"
     return redirect(url)
+
 
 @app.route("/getMatOfSpeDep", methods=['GET'])
 def getMatOfSpeDep():
@@ -229,6 +232,7 @@ def getMatOfSpeDep():
     url += '?idDep=' + idDep
     url += '&id=' + id
     return redirect(url)
+
 
 @app.route("/addTable", methods=['GET'])
 def addTable():
@@ -264,6 +268,7 @@ def getRoomCat():
     url += '?idDep=' + idDep
     return redirect(url)
 
+
 @app.route("/genarateTable", methods=['GET'])
 def genarateTable():
     idDep = request.args.get('idDep')
@@ -273,6 +278,7 @@ def genarateTable():
     solve.solveMain(idDep, tableName, softFalg)
     response = [1]
     return jsonify({'response': response})
+
 
 @app.route("/addInstToDepartment", methods=['GET'])
 def redirect_addInstToDepartment():
@@ -298,8 +304,47 @@ def deleteInstFromDep():
     return redirect(url)
 
 
+@app.route("/deleteCourseFromDep", methods=['GET'])
+def deleteCourseFromDep():
+    idDep = request.args.get('toDepartments')
+    number = request.args.get('number')
+    data3 = dataBaseC()
+    data3.delete_Course_from_dep(idDep, number)
+    url = "https://virtual-grad.herokuapp.com/deleteCourseFromDep"
+    url += "?idDep=" + idDep
+    url += "&number=" + number
+    return redirect(url)
 
 
+@app.route("/addTimes", methods=['GET'])
+def addTimes():
+    response = []
+    semester = request.args.get('semester')
+    date = request.args.get('date')
+    courseTimes = request.args.get('courseTimes')
+    labsTimes = request.args.get('labsTimes')
+    dataBaseC().add_times(semester, date, courseTimes, labsTimes)
+    response.append({'status': 'Done'})
+    return jsonify({'response': response})
+
+
+@app.route("/getTimes", methods=['GET'])
+def getTimes():
+    response = []
+    semester = request.args.get('semester')
+    date = request.args.get('date')
+    response = dataBaseC().get_times1(semester, date)
+    return jsonify({'response': response})
+
+
+#  @app.route("/runCore", methods=['GET'])
+# # def runCore():
+# #     idDep = request.args.get('idDep')
+# #     tableName = request.args.get('tableName')
+# #     softFalg = request.args.get('softFlag')
+# #     solve = MainSolving()
+# #     result = solve.solveMain(idDep, tableName, softFalg, semster, date)
+#
 
 
 if __name__ == "__main__":

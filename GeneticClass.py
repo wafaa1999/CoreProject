@@ -2,7 +2,7 @@ from PopulationClass import Population
 from ScheduleClass import Schedule
 import random as rnd
 
-POPULATION_SIZE = 15
+POPULATION_SIZE = 2
 NUMB_OF_ELITE_SCHEDULES = 1
 TOURNAMENT_SELECTION_SIZE = 3
 MUTATION_RATE = 0.15
