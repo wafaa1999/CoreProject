@@ -111,11 +111,23 @@ class dataBaseC():
 
     def add_inst_to_dep(self, idDep, name):
         collection = self._db.Inst
-        row = {
-            "idDepartment": idDep,
-            "name": name
-        }
-        result = collection.insert_one(row)
+        flag = True
+        res = self.get_istn()
+        for i in range(len(res)):
+            if res[i]['name'] == name and res[i]['idDep'] == idDep:
+                flag = False
+        if flag:
+            row = {
+                "idDepartment": idDep,
+                "name": name
+            }
+            result = collection.insert_one(row)
+            return 'true'
+        else:
+            return 'false'
+
+
+
 
 
     def get_istn(self):
