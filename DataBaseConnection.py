@@ -114,7 +114,7 @@ class dataBaseC():
         flag = True
         res = self.get_istn()
         for i in range(len(res)):
-            if res[i]['name'] == name and res[i]['idDep'] == idDep:
+            if res[i]['name'] == name and res[i]['idDepartment'] == idDep:
                 flag = False
         if flag:
             row = {
