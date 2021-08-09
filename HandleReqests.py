@@ -122,6 +122,40 @@ def redirect_addCourseToDepartment():
     return redirect(url)
 
 
+@app.route("/addSoftConst", methods=['GET'])
+def addSoftConst():
+    idDep = request.args.get('idDep')
+    note = request.args.get('note')
+    start = request.args.get('start')
+    end = request.args.get('end')
+    days = request.args.get('days')
+    weight = request.args.get('weight')
+    need = request.args.get('need')
+    space = request.args.get('space')
+    instName = request.args.get('instName')
+    response = dataBaseC().add_soft_const(idDep, note, start, end, days, weight, need, space, instName)
+    return jsonify({'response': response})
+
+
+@app.route("/getSoftConst", methods=['GET'])
+def getSoftConst():
+    idDep = request.args.get('idDep')
+    response = dataBaseC().get_soft_cons_of_dep(idDep)
+    return jsonify({'response': response})
+
+
+
+@app.route("/deleteSoftConst", methods=['GET'])
+def deleteSoftConst():
+    idDep = request.args.get('idDep')
+    note = request.args.get('note')
+    instName = request.args.get('instName')
+    response = dataBaseC().delete_soft_const(idDep, note, instName)
+    return jsonify({'response': response})
+
+
+
+
 @app.route("/getAllMaterialsOfDepartment", methods=['GET'])
 def redirect_getAllMaterialsOfDepartment():
     idDep = request.args.get('idDep')
@@ -310,7 +344,7 @@ def deleteCourseFromDep():
     number = request.args.get('number')
     data3 = dataBaseC()
     data3.delete_Course_from_dep(idDep, number)
-    url = "https://virtual-grad.herokuapp.com/deleteCourseFromDep"
+    url = "http://127.0.0.1:3500/deleteCourseFromDep"
     url += "?idDep=" + idDep
     url += "&number=" + number
     return redirect(url)
@@ -323,7 +357,8 @@ def addTimes():
     date = request.args.get('date')
     courseTimes = request.args.get('courseTimes')
     labsTimes = request.args.get('labsTimes')
-    dataBaseC().add_times(semester, date, courseTimes, labsTimes)
+    startandend = request.args.get('startandend')
+    dataBaseC().add_times(semester, date, courseTimes, labsTimes, startandend)
     response.append({'status': 'Done'})
     return jsonify({'response': response})
 
@@ -335,6 +370,31 @@ def getTimes():
     date = request.args.get('date')
     response = dataBaseC().get_times1(semester, date)
     return jsonify({'response': response})
+
+
+@app.route("/editTimes", methods=['GET'])
+def editTimes():
+    response = []
+    semester = request.args.get('semester')
+    date = request.args.get('date')
+    courseTimes = request.args.get('courseTimes')
+    labsTimes = request.args.get('labsTimes')
+    response = dataBaseC().edit_times(semester, date, courseTimes, labsTimes)
+    return jsonify({'response': response})
+
+
+@app.route("/chooseTable", methods=['GET'])
+def chooseTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    response = dataBaseC().update_chosen_table(idDep, tableName)
+    return jsonify({'response': response})
+
+
+
+
+
 
 
 #  @app.route("/runCore", methods=['GET'])

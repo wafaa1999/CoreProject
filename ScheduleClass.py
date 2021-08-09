@@ -117,7 +117,7 @@ class Schedule:
     def inc_superiority_weight(self):
         self._superiorityWeight += 1
 
-    def inc_middleware_wight(self):
+    def inc_middleware_weight(self):
         self._middlewareWight += 1
 
     def inc_leastwise_weight(self):
@@ -290,7 +290,7 @@ class Schedule:
                                 self._numbOfConflicts += 1
                                 classes[i].set_conflict(False)
 
-        self.findBreakConflict(classes)
+        # self.findBreakConflict(classes)
 
         # بدي اجيب بدل classes  اعبي فيها الاجباري بس لحاله
 
@@ -318,8 +318,10 @@ class Schedule:
 
         return 1 / (1.0 * self._numbOfConflicts + 1)
 
-    def findBreakConflict(self, classes):
+    def find_break_conflict(self, classes):
+        Weight = 0
         for k in range(0, len(self._data.get_instructors())):
+            FlagInst = True
             if self._data.get_instructors()[k].get_want_breaks():
                 for jj in range(0, len(self._data.get_instructors()[k].get_id_for_courses())):
                     var = 0
@@ -331,14 +333,19 @@ class Schedule:
                         durationTwo = classTwo.get_meeting_time().get_end() - classTwo.get_meeting_time().get_start()
                         if durationOne == 1.5 and durationTwo == 1.5:
                             if classOne.get_meeting_time().get_end() == classTwo.get_meeting_time().get_start():
-                                self._numbOfConflicts += 1
+                                FlagInst = False
+                                # self._numbOfConflicts += 1
+
                         if durationOne == 1 and durationTwo == 1:
                             if classOne.get_meeting_time().get_end() == classTwo.get_meeting_time().get_start() or \
                                     classOne.get_meeting_time().get_end() + 1 == classTwo.get_meeting_time().get_start():
                                 var += 1
                                 if var == 2:
-                                    self._numbOfConflicts += 1
+                                    # self._numbOfConflicts += 1
+                                    FlagInst = False
                                     var = 0
+            Weight += 1
+        return Weight
 
     def check_another_room(self, classes1, i):
         arr = [True] * len(self._data.get_rooms())

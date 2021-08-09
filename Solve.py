@@ -29,6 +29,7 @@ class Solve:
         self._idDep = idDep
         self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName)
         self.soft = SOFT_CONSTRAINTS
+        self._db = dataBaseC()
 
     def cal_soft(self):
         SoftCon1 = SoftConstrains(self._data, self._listOfGeneration, self.soft)
@@ -108,6 +109,7 @@ class Solve:
                     self._listOfGeneration.append(population.get_schedules()[0])
                     print("number of diff results =" + str(len(self._listOfGeneration)))
 
+        self._db.change_status('done', self._tableName, self._idDep)
         if self._sofFlag != 'false':
             self.cal_soft()
         else:

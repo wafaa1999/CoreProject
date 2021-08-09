@@ -22,15 +22,41 @@ class dataBaseC():
                 result.append(i)
                 return result
 
-    def add_times(self, semester, date, courseTimes, labsTimes):
+    def add_times(self, semester, date, courseTimes, labsTimes, startandend):
         collection = self._db.SemesterTime
         row = {
             "semester": semester,
             "date": date,
             "courseTimes": courseTimes,
-            "labsTimes": labsTimes
+            "labsTimes": labsTimes,
+            "startandend": startandend
         }
         result = collection.insert_one(row)
+
+
+
+    def add_soft_const(self, idDep, note, start, end, days, weight, need, space, instName):
+        collection = self._db.SoftConst
+        flag = True
+        for i in collection.find():
+            if i['note'] == note and i['idDep'] == idDep and i['insName'] == instName:
+                flag = False
+        if flag:
+            row = {
+                "note": note,
+                "wieght": weight,
+                "time": start + "/" + end + "/" + days,
+                "insName": instName,
+                "idDep": idDep,
+                "space": space,
+                "need": need,
+            }
+            result = collection.insert_one(row)
+            return 'true'
+        else:
+            return 'false'
+
+
 
     def get_times1(self, semester, date):
         collection = self._db.SemesterTime
@@ -42,6 +68,7 @@ class dataBaseC():
                     date=i['date'],
                     courseTimes=i['courseTimes'],
                     labsTimes=i['labsTimes'],
+                    startandend=i['startandend']
 
 
                 )
@@ -144,6 +171,35 @@ class dataBaseC():
             result.append(i)
         return result
 
+    def get_soft_cons_of_dep(self, idDep):
+        result = self.get_soft_cons()
+        response = []
+        for i in range(len(result)):
+            if result[i]['idDep'] == idDep:
+                row = {
+                    "note": result[i]['note'],
+                    "time": result[i]['time'],
+                    "wieght": result[i]['wieght'],
+                    "insName": result[i]['insName'],
+                    "idDep": result[i]['idDep'],
+                    "space": result[i]['space'],
+                    "need": result[i]['need'],
+                }
+
+                response.append(row)
+        return response
+
+    def get_soft_cons_for_inst(self, name, idDep):
+        result = False
+        collection = self._db.SoftConst
+        for i in collection.find():
+            if i['insName'] == name and i['idDep'] == idDep:
+                result = (i['space'])
+                break
+        return result
+
+
+
     def update_data_for_room(self, idDep, number, campous, type, name):
         flag = False
         collection = self._db["Room"]
@@ -158,6 +214,29 @@ class dataBaseC():
                           "name": name}
                      }, upsert=True
                 )
+    def edit_times(self, semester, date, courseTimes, labsTimes):
+        collection = self._db["SemesterTime"]
+        doc = collection.find_one_and_update(
+            {"semester": semester,
+             "date":date},
+            {"$set":
+                 {"courseTimes": courseTimes,
+                  "labsTimes": labsTimes,
+                  }
+             },upsert=True
+        )
+
+    def update_chosen_table(self, idDep, tableName):
+        collection = self._db["SemesterInformation"]
+        doc = collection.find_one_and_update(
+            {"idDep": idDep},
+            {"$set":
+                 {"tableName": tableName
+                  }
+             }, upsert=True
+        )
+        return 'true'
+
 
 
     def check_room(self, number):
@@ -217,6 +296,15 @@ class dataBaseC():
         for i in collection.find():
             if numberr == i['number'] and idDep == i['idDepartment']:
                 reselt = collection.delete_one({"number": numberr})
+
+
+    def delete_soft_const(self, idDep, note, instName):
+        collection = self._db["SoftConst"]
+        reselt = collection.delete_one({"note": note,
+                                        "insName": instName,
+                                        "idDep": idDep})
+
+        return 'true'
 
 
     def save_to_draft(self, tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date):
@@ -393,7 +481,7 @@ class dataBaseC():
         response = []
         collection = self._db.Course
 
-        result = collection.delete_one({"toDepartments": idDep,
+        result = collection.delete_one({"idDepartment": idDep,
                                         "number": number})
         row = {
             "flag": 'true', }
@@ -440,8 +528,17 @@ class dataBaseC():
 
         return response
 
-
-
+    def change_status(self, param, tableName, idDep):
+        collection = self._db.tables
+        for i in collection.find():
+            if idDep == i['idDep'] and tableName == i['name']:
+                doc = collection.find_one_and_update(
+                    {"name": tableName},
+                    {"$set":
+                         {"status": param,
+                          }
+                     }, upsert=True
+                )
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]

@@ -66,4 +66,13 @@ class SoftConstrains:
                         elif self._softConstrains[i][5] == '0.3':
                             generation.inc_leastwise_weight()
 
+        wieght = generation.find_break_conflict(classes)
+        while wieght != 0:
+            generation.inc_superiority_weight()
+            generation.inc_middleware_weight()
+            generation.inc_leastwise_weight()
+            wieght -= 1
+
+
+
 

@@ -12,6 +12,8 @@ class MainSolving:
         MEETING_TIMES_LABS = []
         MEETING_TIMES_1 = []
         self._db = dataBaseC()
+        self._db.change_status('proc', tableName, idDep)
+
         # Rooms
         result = self._db.get_rooms()
         for i in range(len(result)):
@@ -22,7 +24,11 @@ class MainSolving:
         result1 = self._db.get_istn()
         for i in range(len(result1)):
             if result1[i]['idDepartment'] == idDep:
-               INSTRUCTORS.append([str(result1[i]['_id']), result1[i]['name'], False])
+                softInst = self._db.get_soft_cons_for_inst(result1[i]['name'], idDep)
+                Flag0 = False
+                if softInst == 'true':
+                    Flag0 = True
+            INSTRUCTORS.append([str(result1[i]['_id']), result1[i]['name'], Flag0])
 
         #SOFTCONSTRAINS
         result3 = self._db.get_soft_cons()
@@ -141,7 +147,7 @@ class MainSolving:
 
 
 
-
+#
 # s = MainSolving()
 # s.solveMain('60ddc9735b4d43f8eaaabf83', 'الفصل الاول', 'true','1','2020/2021')
-
+#
