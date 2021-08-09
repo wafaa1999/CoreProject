@@ -371,6 +371,11 @@ def getTimes():
     response = dataBaseC().get_times1(semester, date)
     return jsonify({'response': response})
 
+@app.route("/getAllTimes", methods=['GET'])
+def getAllTimes():
+    response = []
+    response = dataBaseC().get_all_times()
+    return jsonify({'response': response})
 
 @app.route("/editTimes", methods=['GET'])
 def editTimes():

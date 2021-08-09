@@ -22,6 +22,21 @@ class dataBaseC():
                 result.append(i)
                 return result
 
+    def get_all_times(self):
+        collection = self._db.SemesterTime
+        result = []
+        for i in collection.find():
+            row = {
+                "semester": i['semester'],
+                "date": i['date'],
+                "courseTimes": i['courseTimes'],
+                "labsTimes": i['labsTimes'],
+                "startandend": i['startandend']
+            }
+
+            result.append(i)
+        return result
+
     def add_times(self, semester, date, courseTimes, labsTimes, startandend):
         collection = self._db.SemesterTime
         row = {
