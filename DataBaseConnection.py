@@ -34,7 +34,7 @@ class dataBaseC():
                 "startandend": i['startandend']
             }
 
-            result.append(i)
+            result.append(row)
         return result
 
     def add_times(self, semester, date, courseTimes, labsTimes, startandend):
