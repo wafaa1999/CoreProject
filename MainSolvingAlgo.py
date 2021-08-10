@@ -151,7 +151,7 @@ class MainSolving:
         #تخزين بالداتا بيس
         print("conflict is = " + str(counter))
 
-
+    # idDep, tableName, softFalg, semster, date
     def solveMain(self, idDep, tableName, softFlag, semester, date):
         ROOMS = []
         INSTRUCTORS = []

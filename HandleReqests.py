@@ -431,11 +431,11 @@ def runCore():
     idDep = request.args.get('idDep')
     tableName = request.args.get('tableName')
     date = request.args.get('date')
-    semster = request.args.get('semster')
+    semester = request.args.get('semester')
 
     softFalg = request.args.get('softFlag')
     solve = MainSolving()
-    solve.solveMain(idDep, tableName, softFalg, semster, date)
+    solve.solveMain(idDep, tableName, softFalg, semester, date)
     response = 'true'
     return jsonify({'response': response})
 
