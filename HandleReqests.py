@@ -397,6 +397,15 @@ def chooseTable():
     return jsonify({'response': response})
 
 
+@app.route("/changeStatus", methods=['GET'])
+def changeStatus():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    status = request.args.get('status')
+    response = dataBaseC().change_status(status,tableName,idDep)
+    return jsonify({'response': response})
+
 
 
 
