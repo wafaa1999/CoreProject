@@ -290,6 +290,7 @@ class MainSolving:
                         endTimeCourse1 += endTimeBreak - startTimeBreak
 
         MEETING_TIMES_3 = [["MT27", 8, 9, ["احد", "ثلاثاء"]],
+
                            ["MT28", 9, 10, ["احد", "ثلاثاء"]]]
         # instructor_ID , days , start time ,end time , is_wanted , weight
         toSolve = Solve(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
