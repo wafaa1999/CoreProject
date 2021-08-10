@@ -66,24 +66,32 @@ class GeneticAlgorithm:
 
         for i in range(0, len(mutateSchedule.get_classes())):
             for k in range(0, len(mutateSchedule.get_classes())):
-                if mutateSchedule.get_classes()[k].get_room() == mutateSchedule.get_classes()[i].get_room() and \
-                        mutateSchedule.get_classes()[k].get_meeting_time() == mutateSchedule.get_classes()[i]\
-                        .get_meeting_time() and i != k:
-                    arr = [True] * len(self._data.get_rooms())
-                    meeting = mutateSchedule.get_classes()[i].get_meeting_time()
-                    for p in range(0, len(mutateSchedule.get_classes())):
-                        if mutateSchedule.get_classes()[p].get_meeting_time() == meeting:
-                            index = get_index(self._data.get_rooms(), mutateSchedule.get_classes()[p].get_room())
-                            arr[index] = False
-                    for j in range(0, len(arr)):
-                        if arr[j] and self._data.get_rooms()[j].get_type() == mutateSchedule.get_classes()[i]\
-                                .get_course().get_type():
-                            schedule.get_classes()[i].set_room(self._data.get_rooms()[j])
-                            schedule.get_classes()[i].set_instructor(mutateSchedule.get_classes()[i].get_instructor())
-                            schedule.get_classes()[i].set_meeting_time(
-                                mutateSchedule.get_classes()[i].get_meeting_time())
-                            mutateSchedule.get_classes()[i] = schedule.get_classes()[i]
-                            break
+                if not mutateSchedule.get_classes()[k].get_course().get_from_other_department() and \
+                        not mutateSchedule.get_classes()[i].get_course().get_from_other_department():
+                    if mutateSchedule.get_classes()[k].get_room() == mutateSchedule.get_classes()[i].get_room() and \
+                            mutateSchedule.get_classes()[k].get_meeting_time() == mutateSchedule.get_classes()[i] \
+                            .get_meeting_time() and i != k:
+                        arr = [True] * len(self._data.get_rooms())
+                        meeting = mutateSchedule.get_classes()[i].get_meeting_time()
+                        for p in range(0, len(mutateSchedule.get_classes())):
+                            if not mutateSchedule.get_classes()[p].get_course().get_from_other_department():
+                                if mutateSchedule.get_classes()[p].get_meeting_time() == meeting:
+                                    index = get_index(self._data.get_rooms(),
+                                                      mutateSchedule.get_classes()[p].get_room())
+                                    arr[index] = False
+
+                        for j in range(0, len(arr)):
+
+                            if arr[j] and self._data.get_rooms()[j].get_type() == mutateSchedule.get_classes()[i] \
+                                    .get_course().get_type():
+                                schedule.get_classes()[i].set_room(self._data.get_rooms()[j])
+                                schedule.get_classes()[i].set_instructor(
+                                    mutateSchedule.get_classes()[i].get_instructor())
+                                schedule.get_classes()[i].set_meeting_time(
+                                    mutateSchedule.get_classes()[i].get_meeting_time())
+                                mutateSchedule.get_classes()[i] = schedule.get_classes()[i]
+                                break
+
         mutateSchedule.calculate_fitness
         return mutateSchedule
 

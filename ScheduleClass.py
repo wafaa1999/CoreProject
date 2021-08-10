@@ -159,6 +159,9 @@ class Schedule:
                 answer = find_shared_time_slot(courses[j], self._data)[0]
 
                 newclass.set_meeting_time(answer)
+                # newclass.set_room('من قسم اخر')
+                # newclass.set_instructor('من قسم اخر')
+
             else:
                 if courses[j].get_for_other_department():
                     answer = find_shared_time_slot(courses[j], self._data)[0]

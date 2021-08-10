@@ -36,6 +36,7 @@ class Solve:
         table = SoftCon1.check_for_soft_con()
         print("final Sch")
         print_schedule_as_table(table)
+        self.cal(table)
         dataBaseC().store_in_database(table, self._tableName, self._idDep)
 
     def solve(self):
@@ -43,7 +44,7 @@ class Solve:
         if self._sofFlag == 'false':
             var = 1
         else:
-            var = 100
+            var = 2
         counter1 = 0
         counter2 = 0
         counter = 0
@@ -80,7 +81,7 @@ class Solve:
                     currentState = population.get_schedules()[0].get_fitness()
                     counter = 0
                 #     ********************
-                if counter == 400:
+                if counter == 2:
                      flag = True
 
                 print("\n> Generation # " + str(generationNumber))
@@ -113,6 +114,7 @@ class Solve:
         if self._sofFlag != 'false':
             self.cal_soft()
         else:
+           self.cal(population)
            dataBaseC().store_in_database(population.get_schedules()[0], self._tableName, self._idDep)
 
         # print_generation(population)
@@ -124,6 +126,7 @@ class Solve:
 
     def cal(self, sch):
         counter = 0
+        index = 0;
         classes = sch.get_classes()
         for i in range(0, len(classes)):
             # classes[i]._isTaken = False
@@ -137,6 +140,11 @@ class Solve:
                     print(classes[i])
                     print("calss j  = ")
                     print(classes[j])
+                    classes[i].set_flag_conflict(True)
+                    classes[i].set_class_conflict(index)
+                    classes[j].set_flag_conflict(True)
+                    classes[j].set_class_conflict(index)
+                    index += 1
                     counter += 1
                     classes[i].set_conflict(False)
             for j in range(0, len(classes)):
@@ -175,6 +183,11 @@ class Solve:
                                 print(classes[i])
                                 print("calss j  = ")
                                 print(classes[j])
+                                classes[i].set_flag_conflict(True)
+                                classes[i].set_class_conflict(index)
+                                classes[j].set_flag_conflict(True)
+                                classes[j].set_class_conflict(index)
+                                index += 1
                                 counter += 1
                                 classes[i].set_conflict(False)
 
@@ -184,6 +197,11 @@ class Solve:
                                 print(classes[i])
                                 print("calss j  = ")
                                 print(classes[j])
+                                classes[i].set_flag_conflict(True)
+                                classes[i].set_class_conflict(index)
+                                classes[j].set_flag_conflict(True)
+                                classes[j].set_class_conflict(index)
+                                index += 1
                                 counter += 1
                                 classes[i].set_conflict(False)
 
@@ -194,6 +212,11 @@ class Solve:
                                 print(classes[i])
                                 print("calss j  = ")
                                 print(classes[j])
+                                classes[i].set_flag_conflict(True)
+                                classes[i].set_class_conflict(index)
+                                classes[j].set_flag_conflict(True)
+                                classes[j].set_class_conflict(index)
+                                index += 1
                                 counter += 1
                                 classes[i].set_conflict(False)
 
@@ -210,61 +233,17 @@ class Solve:
                                 print(classes[i])
                                 print("calss j  = ")
                                 print(classes[j])
+                                classes[i].set_flag_conflict(True)
+                                classes[i].set_class_conflict(index)
+                                classes[j].set_flag_conflict(True)
+                                classes[j].set_class_conflict(index)
+                                index += 1
                                 counter += 1
                                 classes[i].set_conflict(False)
             for k in range(0, len(self._data.get_instructors())):
                 for jj in range(0, len(self._data.get_instructors()[k].get_id_for_courses())):
                     var = 0
                     classOne = sch.search_for_course(classes, self._data.get_instructors()[k].get_id_for_courses()[jj])
-        for a in range(0, len(self._data.get_instructors()[k].get_id_for_courses())):
-            classTwo = sch.search_for_course(classes, self._data.get_instructors()[k].get_id_for_courses()[a])
-            durationOne = classOne.get_meeting_time().get_end() - classOne.get_meeting_time().get_start()
-            durationTwo = classTwo.get_meeting_time().get_end() - classTwo.get_meeting_time().get_start()
-            if durationOne == 1.5 and durationTwo == 1.5:
-                if classOne.get_meeting_time().get_end() == classTwo.get_meeting_time().get_start():
-                    print("duration 1.5")
-                    print("calss i  = ")
-                    print(classOne)
-                    print("calss j  = ")
-                    print(classTwo)
-                    counter += 1
-            if durationOne == 1 and durationTwo == 1:
-                if classOne.get_meeting_time().get_end() == classTwo.get_meeting_time().get_start() or \
-                        classOne.get_meeting_time().get_end() + 1 == classTwo.get_meeting_time().get_start():
-                    var += 1
-                    if var == 2:
-                        print("duration 1")
-                        print("calss i  = ")
-                        print(classOne)
-                        print("calss j  = ")
-                        print(classTwo)
-                        counter += 1
-                        var = 0
-
-                # بدي اجيب بدل classes  اعبي فيها الاجباري بس لحاله
-            m: int = 0
-            for y in range(0, len(self._data.get_courses_of_years())):  # number of years
-
-                for p in range(0, len(self._data.get_courses_of_years()[y])):  # number of courses in each year
-                    SectionOfClass = self._data.get_courses_of_years()[y][p]  # whole course
-                    if_there_is_section = False
-                    if 1 < len(SectionOfClass) < 4:  # كمان لازم اتأكد اانو نفس الفصل
-                        for t in range(0, len(SectionOfClass)):
-                            newclass = sch.search_for_class(SectionOfClass[t], classes)
-                            if not (
-                                    newclass.get_course().check_if_optional()) and newclass.get_course().get_semester() == self._data._semester \
-                                    and not newclass.get_course().get_for_other_department():
-                                if not newclass.get_is_taken():
-                                    checked_flag = sch.check_for_conflict(SectionOfClass[t], classes,
-                                                                          len(SectionOfClass), p, t)
-                                    if not checked_flag:
-                                        print("grouping")
-                                        print("calss i  = ")
-                                        print(classes[i])
-                                        print("calss j  = ")
-                                        print(classes[j])
-                                        counter += 1
-                                        newclass.set_conflict(False)
 
             for m in range(len(classes)):
                 classes[m].set_is_taken(False)

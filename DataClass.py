@@ -103,8 +103,9 @@ class Data:
 
         for k in range(len(courses1)):
             current_course = courses1[k]['courseName']
-            sameCourses = self.get_similar_courses(current_course, courses1)
+            sameCourses = self.get_similar_courses(current_course, result)
             count = len(sameCourses)
+            # count += 1
             for w in range(0, count):
 
                 num = str((w+1)) + "/"+sameCourses[w]['courseNumber']

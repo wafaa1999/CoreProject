@@ -107,6 +107,7 @@ class dataBaseC():
             else:
                 endTime = str(int(time2)) + ":00"
             allDays = ""
+            print(len(classes[i].get_meeting_time().get_days()))
             for j in range(len(classes[i].get_meeting_time().get_days())):
                 allDays += classes[i].get_meeting_time().get_days()[j]
                 if j < len(classes[i].get_meeting_time().get_days()) - 1:
@@ -115,6 +116,10 @@ class dataBaseC():
             room = "من قسم اخر"
             year = "لقسم اخر"
             type = "من قسم اخر"
+            if classes[i].get_flag_conflict() == False:
+                flagConflict = 'false'
+            else:
+                flagConflict = 'true'
 
             if not classes[i].get_course().get_from_other_department():
                 inst = classes[i].get_instructor().get_name()
@@ -135,6 +140,10 @@ class dataBaseC():
                 "tableName": tableName,
                 "idDep": idDep,
                 "roomType": type,
+                "classConflict": classes[i].get_class_conflict(),
+                "flagConflict": flagConflict,
+                "totalNumberOfSection": classes[i].get_course().get_total_number_of_sections(),
+                "semester": classes[i].get_course().get_semester(),
             }
             result = collection.insert_one(row)
 
@@ -214,7 +223,6 @@ class dataBaseC():
         return result
 
 
-
     def update_data_for_room(self, idDep, number, campous, type, name):
         flag = False
         collection = self._db["Room"]
@@ -229,6 +237,8 @@ class dataBaseC():
                           "name": name}
                      }, upsert=True
                 )
+
+
     def edit_times(self, semester, date, courseTimes, labsTimes):
         collection = self._db["SemesterTime"]
         doc = collection.find_one_and_update(
@@ -371,11 +381,10 @@ class dataBaseC():
         elif flag == '2':
             toOtherDep = "true"
 
-        # for i in collection2.find():
-        #     print(i['courseIns'])
-        #     if tableName == i['tableName'] and depId == i['depId'] and courseIns == i['courseIns'] \
-        #             and courseName == i['courseName'] and timeSlot == i['timeSolt'] and roomType == i['roomType'] and date == i['date']\
-        #             and fromOtherDep == i['fromOtherDep'] and toOtherDep == i['toOtherDep']:
+        # for i in collection2.find(): print(i['courseIns']) if tableName == i['tableName'] and depId == i['depId']
+        # and courseIns == i['courseIns'] \ and courseName == i['courseName'] and timeSlot == i['timeSolt'] and
+        # roomType == i['roomType'] and date == i['date']\ and fromOtherDep == i['fromOtherDep'] and toOtherDep == i[
+        # 'toOtherDep']:
         reselt = collection2.delete_one({"tableName": tableName,
                                                  "depId": depId,
                                                  "courseIns": courseIns,
@@ -453,6 +462,44 @@ class dataBaseC():
         return response
 
 
+    def get_final_table(self, tableName, idDep):
+        response = []
+        course = self._db.finalTable
+        result = []
+        for i in course.find():
+            if i['idDep'] == idDep and i['tableName'] == tableName:
+                result.append(i)
+
+        for i in range(len(result)):
+
+            row = dict(
+                courseNumber=result[i]['courseNumber'],
+                courseName=result[i]['courseName'],
+                days=result[i]['days'],
+                startHour=result[i]['startHour'],
+                endHour=result[i]['endHour'],
+                roomNumber=result[i]['roomNumber'],
+                instName=result[i]['instName'],
+                year=result[i]['year'],
+                tableName=result[i]['tableName'],
+                roomType=result[i]['roomType'],
+                idDep=result[i]['idDep'],
+                classConflict=result[i]['classConflict'],
+                flagConflict=result[i]['flagConflict'],
+                semester=result[i]['semester'],
+                totalNumberOfSection=result[i]['totalNumberOfSection']
+
+
+            )
+            response.append(row)
+        return response
+
+
+
+
+
+
+
     def add_table(self, idDep, name, year, semester, status):
         response = []
         flag = False
@@ -509,13 +556,27 @@ class dataBaseC():
         response = []
         flag = False
         collection = self._db.tables
+        collection2 = self._db.SavedMaterial
+        collection3 = self._db.finalTable
+
 
         collection.delete_one({"idDep": idDep,
                                 "name": name
                                 })
+
+        collection2.delete_many({"depId": idDep,
+                               "tableName": name
+                               })
+
+        collection3.delete_many({"idDep": idDep,
+                                 "tableName": name
+                                 })
+
         row = {
             "flag": 'true', }
         response.append(row)
+
+
         return response
 
 

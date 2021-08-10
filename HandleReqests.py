@@ -407,19 +407,39 @@ def changeStatus():
     return jsonify({'response': response})
 
 
+@app.route("/getFinalTable", methods=['GET'])
+def getFinalTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    response = dataBaseC().get_final_table(tableName, idDep)
+    return jsonify({'response': response})
+
+
+@app.route("/checkConflict", methods=['GET'])
+def checkConflict():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    response = (tableName, idDep)
+    return jsonify({'response': response})
 
 
 
+@app.route("/runCore", methods=['GET'])
+def runCore():
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    date = request.args.get('date')
+    semster = request.args.get('semster')
 
-#  @app.route("/runCore", methods=['GET'])
-# # def runCore():
-# #     idDep = request.args.get('idDep')
-# #     tableName = request.args.get('tableName')
-# #     softFalg = request.args.get('softFlag')
-# #     solve = MainSolving()
-# #     result = solve.solveMain(idDep, tableName, softFalg, semster, date)
-#
+    softFalg = request.args.get('softFlag')
+    solve = MainSolving()
+    solve.solveMain(idDep, tableName, softFalg, semster, date)
+    response = 'true'
+    return jsonify({'response': response})
+
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=3015)
+    app.run(debug=True, host='0.0.0.0', port=3000)

@@ -8,10 +8,20 @@ class Class:
         self._isTaken = False
         self._conflict = True
         self._room_conflict = False
+        self._class_conflict = -1
+        self._flag_conflict = False
 
     def get_room_conflict(self): return self._room_conflict
 
     def set_room_conflict(self, value): self._room_conflict = value
+
+    def get_class_conflict(self): return self._class_conflict
+
+    def set_class_conflict(self, value): self._class_conflict = value
+
+    def get_flag_conflict(self): return self._flag_conflict
+
+    def set_flag_conflict(self, value): self._flag_conflict = value
 
     def get_id(self): return self._id
 
