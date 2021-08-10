@@ -425,6 +425,7 @@ def checkConflict():
     return jsonify({'response': response})
 
 
+
 @app.route("/runCore", methods=['GET'])
 def runCore():
     idDep = request.args.get('idDep')
