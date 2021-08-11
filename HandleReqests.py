@@ -433,10 +433,9 @@ def runCore():
     tableName = request.args.get('tableName')
     date = request.args.get('date')
     semester = request.args.get('semester')
-
-    softFalg = request.args.get('softFlag')
+    softFlag = request.args.get('softFlag')
     solve = MainSolving()
-    solve.solveMain(idDep, tableName, softFalg, semester, date)
+    solve.solveMain(idDep, tableName, softFlag, semester, date)
     response = 'true'
     return jsonify({'response': response})
 
@@ -460,7 +459,7 @@ def editFinalTable():
     startHour = request.args.get('startHour')
     endHour = request.args.get('endHour')
     roomNumber = request.args.get('roomNumber')
-    roomType = request.args.get('courseName')
+    roomType = request.args.get('roomType')
     days = request.args.get('days')
     courseNumber = request.args.get('courseNumber')
     instName = request.args.get('instName')
