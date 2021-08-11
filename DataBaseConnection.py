@@ -503,8 +503,6 @@ class dataBaseC():
     def delete_inst_from_dep(self, idDep, name):
        response = []
        collection = self._db.Inst
-
-
        result = collection.delete_one({"idDepartment": idDep,
                                "name": name })
        row = {
@@ -631,7 +629,6 @@ class dataBaseC():
         )
         return 'true'
 
-
     def getDays(self, semester, date):
         response = []
         result4 = self.get_times(semester, date)
@@ -659,6 +656,50 @@ class dataBaseC():
 
                 response.append(days)
         return response
+
+    def delete_times(self, semester, date):
+        collection = self._db.SemesterTime
+        collection.delete_one({"semester": semester,
+                               "date": date,
+
+                               })
+        return 'true'
+
+    def set_approval_table(self, idDep, tableName):
+        collection = self._db.SemesterInformation
+        collection.find_one_and_update(
+            {"idDep": idDep,
+             },
+            {"$set":
+                 {"tableName": tableName,
+                  }
+            }, upsert=True
+        )
+        return 'true'
+
+    def get_from_approval_table(self, idDep):
+        collection = self._db.SemesterInformation
+        for i in collection.find():
+            if i['idDep'] == idDep:
+                table = i['tableName']
+
+        response = self.get_final_table(table, idDep)
+        return response
+
+    def update_after_check_conflict(self, idDep, tableName, courseNumber, classConflict, flagConflict):
+        collection = self._db.finalTable
+        collection.find_one_and_update(
+            {"idDep": tableName,
+             "idDep":idDep,
+             "courseNumber":courseNumber},
+            {"$set":
+                 {"classConflict": classConflict,
+                  "flagConflict":flagConflict
+                  }
+             }, upsert=True
+        )
+
+
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]

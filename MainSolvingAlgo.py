@@ -150,6 +150,11 @@ class MainSolving:
                                 counter += 1
         #تخزين بالداتا بيس
         print("conflict is = " + str(counter))
+        #idDep, tableName, courseNumber, classConflict, flagConflict
+        for e in range(len(classesOfData)):
+            dataBaseC().update_after_check_conflict(idDep, tableName, classesOfData[e].get_course_number(), classesOfData[e].get_class_conflict(),
+                                                    classesOfData[e].get_flag_conflict())
+        return 'true'
 
     # idDep, tableName, softFalg, semster, date
     def solveMain(self, idDep, tableName, softFlag, semester, date):

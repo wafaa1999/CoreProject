@@ -144,7 +144,6 @@ def getSoftConst():
     return jsonify({'response': response})
 
 
-
 @app.route("/deleteSoftConst", methods=['GET'])
 def deleteSoftConst():
     idDep = request.args.get('idDep')
@@ -152,8 +151,6 @@ def deleteSoftConst():
     instName = request.args.get('instName')
     response = dataBaseC().delete_soft_const(idDep, note, instName)
     return jsonify({'response': response})
-
-
 
 
 @app.route("/getAllMaterialsOfDepartment", methods=['GET'])
@@ -350,7 +347,6 @@ def deleteCourseFromDep():
     return redirect(url)
 
 
-
 @app.route("/addTimes", methods=['GET'])
 def addTimes():
     response = []
@@ -372,11 +368,13 @@ def getTimes():
     response = dataBaseC().get_times1(semester, date)
     return jsonify({'response': response})
 
+
 @app.route("/getAllTimes", methods=['GET'])
 def getAllTimes():
     response = []
     response = dataBaseC().get_all_times()
     return jsonify({'response': response})
+
 
 @app.route("/editTimes", methods=['GET'])
 def editTimes():
@@ -404,7 +402,7 @@ def changeStatus():
     idDep = request.args.get('idDep')
     tableName = request.args.get('tableName')
     status = request.args.get('status')
-    response = dataBaseC().change_status(status,tableName,idDep)
+    response = dataBaseC().change_status(status, tableName, idDep)
     return jsonify({'response': response})
 
 
@@ -415,16 +413,6 @@ def getFinalTable():
     tableName = request.args.get('tableName')
     response = dataBaseC().get_final_table(tableName, idDep)
     return jsonify({'response': response})
-
-
-@app.route("/checkConflict", methods=['GET'])
-def checkConflict():
-    response = []
-    idDep = request.args.get('idDep')
-    tableName = request.args.get('tableName')
-    response = (tableName, idDep)
-    return jsonify({'response': response})
-
 
 
 @app.route("/runCore", methods=['GET'])
@@ -464,16 +452,52 @@ def editFinalTable():
     courseNumber = request.args.get('courseNumber')
     instName = request.args.get('instName')
 
-    response = dataBaseC().update_final_table(idDep, tableName, courseNumber, startHour, endHour, roomNumber, roomType, days, instName)
+    response = dataBaseC().update_final_table(idDep, tableName, courseNumber, startHour, endHour, roomNumber, roomType,
+                                              days, instName)
     return jsonify({'response': response})
 
 
-@app.route("/getDays", methods =['GET'])
+@app.route("/getDays", methods=['GET'])
 def getDays():
     response = []
     semester = request.args.get('semester')
     date = request.args.get('date')
     response = dataBaseC().getDays(semester, date)
+    return jsonify({'response': response})
+
+
+@app.route("/deleteTimes", methods=['GET'])
+def deleteTimes():
+    response = []
+    semester = request.args.get('semester')
+    date = request.args.get('date')
+    response = dataBaseC().delete_times(semester, date)
+    return jsonify({'response': response})
+
+
+@app.route("/setApprovalTable", methods=['GET'])
+def setApprovalTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    response = dataBaseC().set_approval_table(idDep, tableName)
+    return jsonify({'response': response})
+
+
+@app.route("/getDataFromApprovalOfDep", methods=['GET'])
+def getDataFromApprovalOfDep():
+    response = []
+    idDep = request.args.get('idDep')
+    response = dataBaseC().get_from_approval_table(idDep)
+    return jsonify({'response': response})
+
+
+@app.route("/checkConflict", methods=['GET'])
+def checkConflict():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    response = MainSolving().cal_fitness(idDep, tableName)
     return jsonify({'response': response})
 
 
