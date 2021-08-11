@@ -350,6 +350,7 @@ def deleteCourseFromDep():
     return redirect(url)
 
 
+
 @app.route("/addTimes", methods=['GET'])
 def addTimes():
     response = []
