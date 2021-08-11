@@ -597,7 +597,7 @@ class dataBaseC():
             collection.update_many(
                 {"idDep": idDep,
                  "tableName": tableName,
-                 "courseNumber": courseNumber},
+                 "courseName": courseName},
                 {"$set":
                      {"totalNumberOfSection": sections
                       }
