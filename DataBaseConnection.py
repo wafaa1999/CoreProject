@@ -48,8 +48,6 @@ class dataBaseC():
         }
         result = collection.insert_one(row)
 
-
-
     def add_soft_const(self, idDep, note, start, end, days, weight, need, space, instName):
         collection = self._db.SoftConst
         flag = True
@@ -71,8 +69,6 @@ class dataBaseC():
         else:
             return 'false'
 
-
-
     def get_times1(self, semester, date):
         collection = self._db.SemesterTime
         response = []
@@ -89,7 +85,6 @@ class dataBaseC():
                 )
                 response.append(row)
         return response
-
 
     def store_in_database(self, table, tableName, idDep):
         classes = table.get_classes()
@@ -177,10 +172,6 @@ class dataBaseC():
         else:
             return 'false'
 
-
-
-
-
     def get_istn(self):
         collection = self._db.Inst
         result = []
@@ -222,7 +213,6 @@ class dataBaseC():
                 break
         return result
 
-
     def update_data_for_room(self, idDep, number, campous, type, name):
         flag = False
         collection = self._db["Room"]
@@ -237,7 +227,6 @@ class dataBaseC():
                           "name": name}
                      }, upsert=True
                 )
-
 
     def edit_times(self, semester, date, courseTimes, labsTimes):
         collection = self._db["SemesterTime"]
@@ -261,8 +250,6 @@ class dataBaseC():
              }, upsert=True
         )
         return 'true'
-
-
 
     def check_room(self, number):
         collection = self._db.Room
@@ -314,14 +301,12 @@ class dataBaseC():
 
         return response
 
-
     def delete_room_from_dep(self, idDep, numberr):
         flag = False
         collection = self._db["Room"]
         for i in collection.find():
             if numberr == i['number'] and idDep == i['idDepartment']:
                 reselt = collection.delete_one({"number": numberr})
-
 
     def delete_soft_const(self, idDep, note, instName):
         collection = self._db["SoftConst"]
@@ -330,7 +315,6 @@ class dataBaseC():
                                         "idDep": idDep})
 
         return 'true'
-
 
     def save_to_draft(self, tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date):
         collection = self._db.Course
@@ -371,7 +355,6 @@ class dataBaseC():
                 return 'True'
         return 'False'
 
-
     def delete_from_draft(self, tableName, depId, courseIns, courseName, flag, timeSlot, roomType, date):
         collection2 = self._db.SavedMaterial
         fromOtherDep = "false"
@@ -397,9 +380,6 @@ class dataBaseC():
                                                  })
         print(reselt)
         return 'True'
-
-
-
 
     def check_dep(self, idDep):
         collection = self._db.FristTime
@@ -461,7 +441,6 @@ class dataBaseC():
 
         return response
 
-
     def get_final_table(self, tableName, idDep):
         response = []
         course = self._db.finalTable
@@ -493,12 +472,6 @@ class dataBaseC():
             )
             response.append(row)
         return response
-
-
-
-
-
-
 
     def add_table(self, idDep, name, year, semester, status):
         response = []
@@ -550,8 +523,6 @@ class dataBaseC():
         response.append(row)
         return response
 
-
-
     def delete_table(self, idDep, name):
         response = []
         flag = False
@@ -578,9 +549,6 @@ class dataBaseC():
 
 
         return response
-
-
-
 
     def get_tables_table(self, idDep):
         response = []
@@ -615,6 +583,56 @@ class dataBaseC():
                           }
                      }, upsert=True
                 )
+
+    def delete_from_final_table(self, idDep, tableName, courseNumber, courseName):
+        collection = self._db.finalTable
+        result = self.get_final_table(tableName, idDep)
+        for i in range(len(result)):
+            if result[i]['tableName'] == tableName and idDep == result[i]['idDep'] and courseNumber == result[i]['courseNumber']:
+                sections = result[i]['totalNumberOfSection']
+
+        if sections > 1:
+            sections -= 1
+            collection.update_many(
+                {"idDep": idDep,
+                 "tableName": tableName,
+                 "courseName": courseName},
+                {"$set":
+                     {"totalNumberOfSection": sections
+                      }
+                 }, upsert=True
+            )
+        collection.delete_one({"idDep": idDep,
+                               "tableName": tableName,
+                               "courseName": courseName
+                               })
+        return 'true'
+
+    def update_final_table(self, idDep, tableName, courseNumber, startHour, endHour, roomNumber, roomType, days, instName):
+        collection = self._db.finalTable
+
+        doc = collection.find_one_and_update(
+            {"idDep": idDep,
+             "tableName": tableName,
+             "courseNumber": courseNumber,
+
+             },
+            {"$set":
+                 {"startHour": startHour,
+                  "endHour": endHour,
+                  "endHour": endHour,
+                  "roomNumber": roomNumber,
+                  "roomType": roomType,
+                  "days": days,
+                  "instName": instName,
+                  }
+             }, upsert=True
+        )
+        return 'true'
+
+
+
+
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]

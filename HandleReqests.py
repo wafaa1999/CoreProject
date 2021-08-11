@@ -340,7 +340,7 @@ def deleteInstFromDep():
 
 @app.route("/deleteCourseFromDep", methods=['GET'])
 def deleteCourseFromDep():
-    idDep = request.args.get('toDepartments')
+    idDep = request.args.get('idDep')
     number = request.args.get('number')
     data3 = dataBaseC()
     data3.delete_Course_from_dep(idDep, number)
@@ -437,6 +437,34 @@ def runCore():
     solve = MainSolving()
     solve.solveMain(idDep, tableName, softFalg, semester, date)
     response = 'true'
+    return jsonify({'response': response})
+
+
+@app.route("/deleteFromFinalTable", methods=['GET'])
+def deleteFromFinalTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    courseNumber = request.args.get('courseNumber')
+    courseName = request.args.get('courseName')
+    response = dataBaseC().delete_from_final_table(idDep, tableName, courseNumber, courseName)
+    return jsonify({'response': response})
+
+
+@app.route("/editFinalTable", methods=['GET'])
+def editFinalTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    startHour = request.args.get('startHour')
+    endHour = request.args.get('endHour')
+    roomNumber = request.args.get('roomNumber')
+    roomType = request.args.get('courseName')
+    days = request.args.get('days')
+    courseNumber = request.args.get('courseNumber')
+    instName = request.args.get('instName')
+
+    response = dataBaseC().update_final_table(idDep, tableName, courseNumber, startHour, endHour, roomNumber, roomType, days, instName)
     return jsonify({'response': response})
 
 
