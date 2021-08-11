@@ -632,8 +632,33 @@ class dataBaseC():
         return 'true'
 
 
+    def getDays(self, semester, date):
+        response = []
+        result4 = self.get_times(semester, date)
+        allLabsTimes = result4[0]['labsTimes'].split('*')
+        dayMap = ['سبت', 'احد', 'اثنين', 'ثلاثاء', 'اربعاء', 'خميس']
+        for i in range(len(allLabsTimes)):
+            lab = allLabsTimes[i].split(',')
+            if lab[1] == '1':
+                response.append(dayMap[i])
 
+        allCoursesTimes = result4[0]['courseTimes'].split('*')
+        groupsOfCorses = [[], [], [], [], []]
+        for i in range(len(allCoursesTimes)):
+            firstCourse = allCoursesTimes[i].split(',')
+            if firstCourse[5] == '1':
+                groupsOfCorses[int(firstCourse[4])].append([dayMap[i], allCoursesTimes[i]])
 
+        for k in range(len(groupsOfCorses)):
+            if len(groupsOfCorses[k]) != 0:
+                days = ""
+                for l in range(len(groupsOfCorses[k])):
+                    days += groupsOfCorses[k][l][0]
+                    if l < len(groupsOfCorses[k]) - 1:
+                        days += ','
+
+                response.append(days)
+        return response
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]
