@@ -344,7 +344,7 @@ def deleteCourseFromDep():
     number = request.args.get('number')
     data3 = dataBaseC()
     data3.delete_Course_from_dep(idDep, number)
-    url = "http://127.0.0.1:3500/deleteCourseFromDep"
+    url = "https://virtual-grad.herokuapp.com/deleteCourseFromDep"
     url += "?idDep=" + idDep
     url += "&number=" + number
     return redirect(url)
