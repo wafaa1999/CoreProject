@@ -586,10 +586,11 @@ class dataBaseC():
 
     def delete_from_final_table(self, idDep, tableName, courseNumber, courseName):
         collection = self._db.finalTable
+        sections = 0
         result = self.get_final_table(tableName, idDep)
         for i in range(len(result)):
             if result[i]['tableName'] == tableName and idDep == result[i]['idDep'] and courseNumber == result[i]['courseNumber']:
-                sections = result[i]['totalNumberOfSection']
+                sections += 1
 
         if sections > 1:
             sections -= 1
