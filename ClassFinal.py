@@ -4,11 +4,9 @@ class Classing:
 
     def __init__(self, courseNumber, courseName, days, startHour, endHour,
                  roomNumber, instName, roomType, classConflict,
-                 flagConflict ,year , numberOfSections, semester):
+                 flagConflict,year, numberOfSections, semester):
         self._courseNumber = courseNumber
         self._courseName = courseName
-        self._startHour = startHour
-        self._endHour = endHour
         self._roomNumber = roomNumber
         self._roomType = roomType
         self._instName = instName
@@ -18,9 +16,20 @@ class Classing:
         arr = days.split(',')
         for i in range(len(arr)):
             self._days.append(arr[i])
-        self._year = year
-        self._totalNumberOfSections = numberOfSections
-        self._semester = semester
+        self._year = int(year)
+        self._totalNumberOfSections = int(numberOfSections)
+        self._semester = int (semester)
+        time1 = startHour.split(':')
+        if time1[1] == '00':
+            self._startHour = int(time1[0])
+        else:
+            self._startHour = int(time1[0]) + 0.5
+
+        time2 = endHour.split(':')
+        if time2[1] == '00':
+            self._endHour = int(time2[0])
+        else:
+            self._endHour = int(time2[0]) + 0.5
 
     def get_course_number(self): return self._courseNumber
 

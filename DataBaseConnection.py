@@ -694,10 +694,24 @@ class dataBaseC():
              "courseNumber":courseNumber},
             {"$set":
                  {"classConflict": classConflict,
-                  "flagConflict":flagConflict
+                  "flagConflict": flagConflict
                   }
              }, upsert=True
         )
+
+    def clear_conflict(self, tableName, idDep):
+        collection = self._db.finalTable
+        collection.update_many(
+            {"idDep": tableName,
+             "idDep": idDep,
+             },
+            {"$set":
+                 {"classConflict": -1,
+                  "flagConflict": False,
+                  }
+             }, upsert=True
+        )
+
 
 
 

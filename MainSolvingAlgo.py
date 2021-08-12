@@ -10,6 +10,7 @@ class MainSolving:
     #                  flagConflict
     def cal_fitness(self, idDep, tableName):
         classesOfData = []
+        dataBaseC().clear_conflict(tableName, idDep)
         response = dataBaseC().get_final_table(tableName, idDep)
         for k in range(len(response)):
            classesOfData.append(Classing(response[k]['courseNumber'], response[k]['courseName'], response[k]['days']
@@ -59,7 +60,7 @@ class MainSolving:
                         SameStart = True
                     if classesOfData[i].get_end_hour() == classesOfData[j].get_end_hour():
                         SameEnd = True
-                    if ((classesOfData[j].get_start_hour()  < classesOfData[i].get_start_hour() ) and
+                    if ((classesOfData[j].get_start_hour()< classesOfData[i].get_start_hour()) and
                             (classesOfData[j].get_end_hour() > classesOfData[i].get_start_hour() )):
                         DuringStart = True
                     if ((classesOfData[j].get_start_hour() < classesOfData[i].get_end_hour()) and
