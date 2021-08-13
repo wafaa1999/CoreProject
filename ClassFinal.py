@@ -16,7 +16,10 @@ class Classing:
         arr = days.split(',')
         for i in range(len(arr)):
             self._days.append(arr[i])
-        self._year = int(year)
+        if year == 'لقسم اخر':
+            self._year = 'لقسم اخر'
+        else:
+            self._year = int(year)
         self._totalNumberOfSections = int(numberOfSections)
         self._semester = int (semester)
         time1 = startHour.split(':')

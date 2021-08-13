@@ -305,4 +305,4 @@ class MainSolving:
 #
 # s = MainSolving()
 # s.solveMain('60ddc9735b4d43f8eaaabf83', 'الفصل الاول', 'true', '1', '2020/2021')
-# # # # s.cal_fitness('60ddc9735b4d43f8eaaabf83', 'الفصل الاول')
+# s.cal_fitness('60ddc9735b4d43f8eaaabf83', 'الفصل الاول')
