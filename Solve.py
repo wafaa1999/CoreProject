@@ -22,12 +22,12 @@ def checkIfEq(schedule1, schedule2):
 class Solve:
 
     def __init__(self, ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
-                 SOFT_CONSTRAINTS, idDep, tableName, softFlag):
+                 SOFT_CONSTRAINTS, idDep, tableName, softFlag, semester):
         self._listOfGeneration = []
         self._sofFlag = softFlag
         self._tableName = tableName
         self._idDep = idDep
-        self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName)
+        self._data = Data(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2, idDep, tableName, semester)
         self.soft = SOFT_CONSTRAINTS
         self._db = dataBaseC()
 

@@ -47,7 +47,7 @@ def add_courses(courses):
 class Data:
 
     def __init__(self, allRooms, meetingTimesOne, meetingTimesLab, meetingTimesThree, instructorsOfCourses,
-                 meetingTimesTwo, idDep, tableName):
+                 meetingTimesTwo, idDep, tableName, semester):
         self._db = dataBaseC()
         self._meetingTimesLabs = []
         self._rooms = []
@@ -65,7 +65,7 @@ class Data:
         self._coursesOfFifthYears = []
         self._courses = []
         #**************************  تعديل
-        self._semester = 1
+        self._semester = semester
         # self._department = 1
 
         for j in range(0, len(allRooms)):

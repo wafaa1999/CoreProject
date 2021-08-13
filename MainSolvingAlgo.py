@@ -300,7 +300,7 @@ class MainSolving:
                            ["MT28", 9, 10, ["احد", "ثلاثاء"]]]
         # instructor_ID , days , start time ,end time , is_wanted , weight
         toSolve = Solve(ROOMS, MEETING_TIMES_1, MEETING_TIMES_LABS, MEETING_TIMES_3, INSTRUCTORS, MEETING_TIMES_2,
-                        SOFT_CONSTRAINTS, idDep, tableName, softFlag)
+                        SOFT_CONSTRAINTS, idDep, tableName, softFlag, semester)
         toSolve.solve()
 #
 # s = MainSolving()

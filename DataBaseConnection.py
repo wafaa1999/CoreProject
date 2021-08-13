@@ -619,7 +619,6 @@ class dataBaseC():
             {"$set":
                  {"startHour": startHour,
                   "endHour": endHour,
-                  "endHour": endHour,
                   "roomNumber": roomNumber,
                   "roomType": roomType,
                   "days": days,
@@ -689,7 +688,7 @@ class dataBaseC():
     def update_after_check_conflict(self, idDep, tableName, courseNumber, classConflict, flagConflict):
         collection = self._db.finalTable
         collection.find_one_and_update(
-            {"idDep": tableName,
+            {"tableName": tableName,
              "idDep":idDep,
              "courseNumber":courseNumber},
             {"$set":
@@ -702,7 +701,7 @@ class dataBaseC():
     def clear_conflict(self, tableName, idDep):
         collection = self._db.finalTable
         collection.update_many(
-            {"idDep": tableName,
+            {"tableName": tableName,
              "idDep": idDep,
              },
             {"$set":
@@ -712,8 +711,58 @@ class dataBaseC():
              }, upsert=True
         )
 
+    def add_to_final_table(self, idDep, tableName, courseName, days, startHour, endHour, roomNumber, roomType, sectionNumber, instName):
+        result = self.get_course_of_dep(idDep)
+        count = 1
+        for i in range(len(result)):
+            if result[i]['name'] == courseName:
+                courseNumber = result[i]['number']
+                year = result[i]['year']
+                break
+        courseNumber += sectionNumber
 
+        result2 = self.get_final_table( tableName, idDep)
+        for j in range(len(result2)):
+            if courseName == result2[j]['courseName']:
+                count += 1
 
+        result3 = self.get_tables_table(idDep)
+        for l in range(len(result3)):
+            if result3[l]['name'] == tableName:
+                semester = result3[l]['semester']
+
+        collection = self._db.finalTable
+        row = {
+            "courseNumber": courseNumber,
+            "courseName": courseName,
+            "days": days,
+            "startHour": startHour,
+            "endHour": endHour,
+            "roomNumber": roomNumber,
+            "instName": instName,
+            "tableName": tableName,
+            "idDep": idDep,
+            "roomType": roomType,
+            "classConflict": -1,
+            "flagConflict": False,
+            "totalNumberOfSection": count,
+            "semester": semester,
+            "year":year
+
+        }
+        result = collection.insert_one(row)
+
+        collection.update_many(
+            {"tableName": tableName,
+             "idDep": idDep,
+             },
+            {"$set":
+                 {"totalNumberOfSection": count,
+
+                  }
+             }, upsert=True
+        )
+        return 'true'
 
 #     def updatcourse(self):
 #         collection = self._db["SavedMaterial"]

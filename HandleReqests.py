@@ -502,5 +502,23 @@ def checkConflict():
     return jsonify({'response': response})
 
 
+@app.route("/addFinalTable", methods=['GET'])
+def addFinalTable():
+    response = []
+    idDep = request.args.get('idDep')
+    tableName = request.args.get('tableName')
+    courseName = request.args.get('courseName')
+    days = request.args.get('days')
+    startHour = request.args.get('startHour')
+    endHour = request.args.get('endHour')
+    roomNumber = request.args.get('roomNumber')
+    roomType = request.args.get('roomType')
+    sectionNumber = request.args.get('sectionNumber')
+    instName = request.args.get('instName')
+
+    response = dataBaseC().add_to_final_table(idDep, tableName, courseName, days, startHour, endHour, roomNumber, roomType, sectionNumber, instName)
+    return jsonify({'response': response})
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=3000)
