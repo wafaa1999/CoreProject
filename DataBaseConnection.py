@@ -719,6 +719,7 @@ class dataBaseC():
                 courseNumber = result[i]['number']
                 year = result[i]['year']
                 break
+        courseNumber += '/'
         courseNumber += sectionNumber
 
         result2 = self.get_final_table( tableName, idDep)
