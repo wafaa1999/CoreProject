@@ -31,6 +31,17 @@ def redirect_login():
     url += "?idUser=" + idUser + "&password=" + password
     return redirect(url)
 
+@app.route("/getUsers", methods=['GET'])
+def redirect_getUser():
+
+    idDep = request.args.get('idDep')
+    # url = "https://virtual-grad.herokuapp.com/getUsers"
+    url = "http://192.168.1.7:3500/getUsers"
+    url += "?idDep=" + idDep
+    print(url)
+    return redirect(url)
+
+
 
 @app.route("/firstTime", methods=['GET'])
 def firstTime():
@@ -315,10 +326,14 @@ def genarateTable():
 def redirect_addInstToDepartment():
     idDep = request.args.get('idDep')
     name = request.args.get('name')
+    email = request.args.get('email')
+    gender = request.args.get('gender')
     data2 = dataBaseC()
     data2.add_inst_to_dep(idDep, name)
     url = "https://virtual-grad.herokuapp.com/addInstToDepartment?"
     url += "idDep=" + idDep + "&"
+    url += "email=" + email + "&"
+    url += "gender=" + gender + "&"
     url += "name=" + name
     return redirect(url)
 
@@ -518,6 +533,40 @@ def addFinalTable():
 
     response = dataBaseC().add_to_final_table(idDep, tableName, courseName, days, startHour, endHour, roomNumber, roomType, sectionNumber, instName)
     return jsonify({'response': response})
+
+
+@app.route("/addNotification", methods=['GET'])
+def addNotification():
+    response = []
+    idDep = request.args.get('idDep')
+    note = request.args.get('note')
+    flag = request.args.get('flag')
+    time = request.args.get('time')
+    hour = request.args.get('hour')
+
+    response = dataBaseC().add_notification(flag, note, idDep, time, hour)
+    return jsonify({'response': response})
+
+
+@app.route("/getNotification", methods=['GET'])
+def getNotification():
+    response = []
+    idDep = request.args.get('idDep')
+    instName = request.args.get('instName')
+    response = dataBaseC().get_notification(instName, idDep)
+    return jsonify({'response': response})
+
+
+@app.route("/editNotification", methods=['GET'])
+def editNotification():
+    response = []
+    idDep = request.args.get('idDep')
+    instName = request.args.get('instName')
+    note = request.args.get('note')
+    response = dataBaseC().edit_notification(instName, idDep, note)
+    return jsonify({'response': response})
+
+
 
 
 if __name__ == "__main__":

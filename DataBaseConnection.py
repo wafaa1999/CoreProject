@@ -165,7 +165,8 @@ class dataBaseC():
         if flag:
             row = {
                 "idDepartment": idDep,
-                "name": name
+                "name": name,
+                "type": 'normal'
             }
             result = collection.insert_one(row)
             return 'true'
@@ -766,11 +767,102 @@ class dataBaseC():
         )
         return 'true'
 
+    def add_notification(self, flag, note, idDep, time, hour):
+        collection = self._db.NotificationTable
+        result = self.get_istn()
+        if flag == '1':
+            # من رئيس قسم لدكاترته
+
+            for i in range(len(result)):
+                if result[i]['idDepartment'] == idDep and result[i]['type'] == 'normal':
+                    row = {
+                        "instName": result[i]['name'],
+                        "note": note,
+                        "idDep": idDep,
+                        "flag": 'true',
+                        "time":time,
+                        "hour":hour,
+                        "from": 'headOfDep'
+
+                    }
+                    collection.insert_one(row)
+        elif flag == '2':
+            #من العميد لرؤساء الاقسام
+            for m in range(len(result)):
+                if  result[m]['type'] == 'head of department':
+                    row = {
+                        "instName": result[m]['name'],
+                        "note": note,
+                        "idDep": idDep,
+                        "flag": 'true',
+                        "time": time,
+                        "hour": hour,
+                        "from": 'head'
+
+                    }
+                    collection.insert_one(row)
+
+
+        elif flag == '3':
+            # من العميد لدكاترة
+            for k in range(len(result)):
+                if result[k]['type'] == 'normal':
+                    row = {
+                        "instName": result[k]['name'],
+                        "note": note,
+                        "idDep": idDep,
+                        "flag": 'true',
+                        "time": time,
+                        "hour": hour,
+                        "head":'head'
+
+                    }
+                    collection.insert_one(row)
+
+
+        return ' true'
+
+    def get_notification(self, instName, idDep):
+        result = []
+        collection = self._db.NotificationTable
+        for i in collection.find().sort('time'):
+            if i['instName'] == instName and i['idDep'] == idDep:
+                row = {
+                    "instName": instName,
+                    "note": i['note'],
+                    "idDep": idDep,
+                    "flag": i['flag'],
+                    "time": i['time'],
+                    "hour": i['hour'],
+                    "from": i['from']
+
+                }
+                result.append(row)
+
+        return result
+
+    def edit_notification(self, instName, idDep, note):
+        collection = self._db.NotificationTable
+        collection.find_one_and_update(
+            {"instName": instName,
+             "idDep": idDep,
+             "note": note
+             },
+            {"$set":
+                 {"flag": 'false',
+
+                  }
+             }, upsert=True
+        )
+        return  'true'
+
+
+
 #     def updatcourse(self):
-#         collection = self._db["SavedMaterial"]
-#         collection.update_many({}, {"$set": {"specialty": "هندسة حاسوب"}}, upsert=False, array_filters=None)
+#         collection = self._db["Inst"]
+#         collection.update_many({}, {"$set": {"type": "normal"}}, upsert=False, array_filters=None)
 #
 #
 # d = dataBaseC().updatcourse()
-#
-#
+
+
