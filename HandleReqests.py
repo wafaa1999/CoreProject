@@ -35,8 +35,8 @@ def redirect_login():
 def redirect_getUser():
 
     idDep = request.args.get('idDep')
-    # url = "https://virtual-grad.herokuapp.com/getUsers"
-    url = "http://192.168.1.7:3500/getUsers"
+    url = "https://virtual-grad.herokuapp.com/getUsers"
+    # url = "http://192.168.1.7:3500/getUsers"
     url += "?idDep=" + idDep
     print(url)
     return redirect(url)
