@@ -551,19 +551,19 @@ def addNotification():
 @app.route("/getNotification", methods=['GET'])
 def getNotification():
     response = []
-    idDep = request.args.get('idDep')
+    # idDep = request.args.get('idDep')
     instName = request.args.get('instName')
-    response = dataBaseC().get_notification(instName, idDep)
+    response = dataBaseC().get_notification(instName)
     return jsonify({'response': response})
 
 
 @app.route("/editNotification", methods=['GET'])
 def editNotification():
     response = []
-    idDep = request.args.get('idDep')
+    # idDep = request.args.get('idDep')
     instName = request.args.get('instName')
     note = request.args.get('note')
-    response = dataBaseC().edit_notification(instName, idDep, note)
+    response = dataBaseC().edit_notification(instName, note)
     return jsonify({'response': response})
 
 

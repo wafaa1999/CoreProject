@@ -508,6 +508,7 @@ class dataBaseC():
                                "name": name })
        row = {
             "flag": 'true', }
+
        response.append(row)
        return response
 
@@ -778,7 +779,6 @@ class dataBaseC():
                     row = {
                         "instName": result[i]['name'],
                         "note": note,
-                        "idDep": idDep,
                         "flag": 'true',
                         "time":time,
                         "hour":hour,
@@ -793,7 +793,7 @@ class dataBaseC():
                     row = {
                         "instName": result[m]['name'],
                         "note": note,
-                        "idDep": idDep,
+
                         "flag": 'true',
                         "time": time,
                         "hour": hour,
@@ -810,7 +810,7 @@ class dataBaseC():
                     row = {
                         "instName": result[k]['name'],
                         "note": note,
-                        "idDep": idDep,
+
                         "flag": 'true',
                         "time": time,
                         "hour": hour,
@@ -822,15 +822,15 @@ class dataBaseC():
 
         return ' true'
 
-    def get_notification(self, instName, idDep):
+    def get_notification(self, instName):
         result = []
         collection = self._db.NotificationTable
         for i in collection.find().sort('time'):
-            if i['instName'] == instName and i['idDep'] == idDep:
+            if i['instName'] == instName :
                 row = {
                     "instName": instName,
                     "note": i['note'],
-                    "idDep": idDep,
+
                     "flag": i['flag'],
                     "time": i['time'],
                     "hour": i['hour'],
@@ -841,11 +841,11 @@ class dataBaseC():
 
         return result
 
-    def edit_notification(self, instName, idDep, note):
+    def edit_notification(self, instName, note):
         collection = self._db.NotificationTable
         collection.find_one_and_update(
             {"instName": instName,
-             "idDep": idDep,
+
              "note": note
              },
             {"$set":
