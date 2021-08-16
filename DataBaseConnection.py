@@ -814,7 +814,8 @@ class dataBaseC():
                         "flag": 'true',
                         "time": time,
                         "hour": hour,
-                        "head":'head'
+                        "from":'head',
+
 
                     }
                     collection.insert_one(row)
