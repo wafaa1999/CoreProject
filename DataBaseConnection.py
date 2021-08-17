@@ -37,6 +37,31 @@ class dataBaseC():
             result.append(row)
         return result
 
+    def get_times_for_head_Dep(self):
+        response = []
+        result = self.get_all_times()
+        index = 0
+        date = (result[0]['date']).split('/')
+        max = date[1]
+        for i in range(len(result)):
+            date = (result[i]['date']).split('/')
+            print("max is" + str(max))
+            print("other is" + str(date[1]))
+
+            if max < date[1]:
+                max = date[1]
+                index = i
+        row = {
+            "semester": result[index]['semester'],
+            "date": result[index]['date'],
+            "courseTimes":  result[index]['courseTimes'],
+            "labsTimes":  result[index]['labsTimes'],
+            "startandend":  result[index]['startandend']
+        }
+        response.append(row)
+        return response
+
+
     def add_times(self, semester, date, courseTimes, labsTimes, startandend):
         collection = self._db.SemesterTime
         row = {
@@ -47,6 +72,36 @@ class dataBaseC():
             "startandend": startandend
         }
         result = collection.insert_one(row)
+
+        collection2 = self._db.SoftConst
+        collection2.remove()
+
+    def add_stop_flag(self, tableName):
+        collection = self._db.worked
+        row = {
+            "tableName": tableName,
+            "state": '0',
+        }
+        result = collection.insert_one(row)
+
+    def get_stop_flag(self, tableName):
+        collection = self._db.worked
+
+        for i in collection.find():
+            if i['tableName'] == tableName:
+                return i['state']
+
+    def update_stop_flag(self, tableName):
+        collection = self._db.worked
+        doc = collection.find_one_and_update(
+            {"tableName": tableName},
+            {"$set":
+                 {"state": '1',
+                  }
+             }, upsert=True
+        )
+
+
 
     def add_soft_const(self, idDep, note, start, end, days, weight, need, space, instName):
         collection = self._db.SoftConst
@@ -774,8 +829,9 @@ class dataBaseC():
         if flag == '1':
             # من رئيس قسم لدكاترته
 
+
             for i in range(len(result)):
-                if result[i]['idDepartment'] == idDep and result[i]['type'] == 'normal':
+                if result[i]['idDepartment'] == idDep and result[i]['type'] == 'normal' :
                     row = {
                         "instName": result[i]['name'],
                         "note": note,
@@ -819,14 +875,27 @@ class dataBaseC():
 
                     }
                     collection.insert_one(row)
+        elif flag =='4':
+            for m in range(len(result)):
+                if  result[m]['type'] == 'head of department' and result[m]['idDepartment'] == idDep:
+                    row = {
+                        "instName": result[m]['name'],
+                        "note": note,
 
+                        "flag": 'true',
+                        "time": time,
+                        "hour": hour,
+                        "from": 'head'
+
+                    }
+                    collection.insert_one(row)
 
         return ' true'
 
     def get_notification(self, instName):
         result = []
         collection = self._db.NotificationTable
-        for i in collection.find().sort('time'):
+        for i in collection.find():
             if i['instName'] == instName :
                 row = {
                     "instName": instName,

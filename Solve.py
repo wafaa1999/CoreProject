@@ -49,7 +49,12 @@ class Solve:
         counter2 = 0
         counter = 0
         currentState = 0
+        counterFlag = 0
+        flagStopped = False
+
+
         for i in range(0, var):
+
             flag = False
             displayMgr = DisplayMgr(self._data)
             generationNumber = 0
@@ -64,16 +69,16 @@ class Solve:
                 counter1 += 1
 
                 print("\n> Generation # " + str(generationNumber) + "   i #" + str(i))
-                # if len(self._listOfGeneration) == 0:
-                #     self._listOfGeneration.append((population.get_schedules()[0]))
-                # for w in range(0, len(self._listOfGeneration)):
-                #     FlagForEq = self.checkIfEq(self._listOfGeneration[w], population.get_schedules()[0])
-                #     if FlagForEq:
-                #         break
-                # if not FlagForEq:
                 self._listOfGeneration.append(population.get_schedules()[0])
 
-            while population.get_schedules()[0].get_fitness() != 1.0:
+            while population.get_schedules()[0].get_fitness() != 1.0 or not flag or not flagStopped:
+                counterFlag += 1
+                if counterFlag == 20:
+                   constant = self._db. get_stop_flag(self._tableName)
+                   if constant == '1':
+                        flagStopped = True
+
+
                 generationNumber += 1
                 if currentState == population.get_schedules()[0].get_fitness():
                     counter += 1
@@ -81,7 +86,7 @@ class Solve:
                     currentState = population.get_schedules()[0].get_fitness()
                     counter = 0
                 #     ********************
-                if counter == 2:
+                if counter == 1000:
                      flag = True
 
                 print("\n> Generation # " + str(generationNumber))
@@ -111,6 +116,8 @@ class Solve:
                     print("number of diff results =" + str(len(self._listOfGeneration)))
 
         self._db.change_status('done', self._tableName, self._idDep)
+        note = "تم الانتهاء من انشاء الجدول الدراسي : " + self._tableName +"يرجى الاطلاع عليه لاجراءات التعديلات اللازمة"
+        self._db.add_notification('4', note, self._idDep, 0, 0)
         if self._sofFlag != 'false':
             self.cal_soft()
         else:

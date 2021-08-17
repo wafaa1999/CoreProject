@@ -41,6 +41,14 @@ def redirect_getUser():
     print(url)
     return redirect(url)
 
+@app.route("/getAllUsers", methods=['GET'])
+def redirect_getAllUser():
+
+    url = "https://virtual-grad.herokuapp.com/getAllUsers"
+    # url = "http://192.168.1.7:3500/getUsers"
+    print(url)
+    return redirect(url)
+
 
 
 @app.route("/firstTime", methods=['GET'])
@@ -438,7 +446,16 @@ def runCore():
     semester = request.args.get('semester')
     softFlag = request.args.get('softFlag')
     solve = MainSolving()
+    dataBaseC().add_stop_flag(tableName)
     solve.solveMain(idDep, tableName, softFlag, semester, date)
+    response = 'true'
+    return jsonify({'response': response})
+
+
+@app.route("/stopCore", methods=['GET'])
+def stopCore():
+    tableName = request.args.get('tableName')
+    dataBaseC().update_stop_flag(tableName)
     response = 'true'
     return jsonify({'response': response})
 
@@ -565,6 +582,15 @@ def editNotification():
     note = request.args.get('note')
     response = dataBaseC().edit_notification(instName, note)
     return jsonify({'response': response})
+
+
+@app.route("/getTimesForHeadOfDep", methods=['GET'])
+def getTimesForHeadOfDep():
+    response = []
+    response = dataBaseC().get_times_for_head_Dep()
+    return jsonify({'response': response})
+
+
 
 
 
