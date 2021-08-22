@@ -37,28 +37,40 @@ class dataBaseC():
             result.append(row)
         return result
 
-    def get_times_for_head_Dep(self):
+    def get_times_for_head_Dep(self, date):
         response = []
         result = self.get_all_times()
-        index = 0
-        date = (result[0]['date']).split('/')
-        max = date[1]
-        for i in range(len(result)):
-            date = (result[i]['date']).split('/')
-            print("max is" + str(max))
-            print("other is" + str(date[1]))
+        for i in result:
+            if i['time'] == date:
+                row = {
+                    "semester": result[i]['semester'],
+                    "date": result[i]['date'],
+                    "courseTimes": result[i]['courseTimes'],
+                    "labsTimes": result[i]['labsTimes'],
+                    "startandend": result[i]['startandend']
+                }
+                response.append(row)
 
-            if max < date[1]:
-                max = date[1]
-                index = i
-        row = {
-            "semester": result[index]['semester'],
-            "date": result[index]['date'],
-            "courseTimes":  result[index]['courseTimes'],
-            "labsTimes":  result[index]['labsTimes'],
-            "startandend":  result[index]['startandend']
-        }
-        response.append(row)
+        # index = 0
+        # date = (result[0]['date']).split('/')
+        # max = date[1]
+        # for i in range(len(result)):
+        #     date = (result[i]['date']).split('/')
+        #     print("max is" + str(max))
+        #     print("other is" + str(date[1]))
+        #
+        #     if max < date[1]:
+        #         max = date[1]
+        #         index = i
+        # row = {
+        #     "semester": result[index]['semester'],
+        #     "date": result[index]['date'],
+        #     "courseTimes":  result[index]['courseTimes'],
+        #     "labsTimes":  result[index]['labsTimes'],
+        #     "startandend":  result[index]['startandend']
+        # }
+        # response.append(row)
+
         return response
 
 
@@ -221,7 +233,8 @@ class dataBaseC():
             row = {
                 "idDepartment": idDep,
                 "name": name,
-                "type": 'normal'
+                "type": 'normal',
+
             }
             result = collection.insert_one(row)
             return 'true'
@@ -885,7 +898,7 @@ class dataBaseC():
                         "flag": 'true',
                         "time": time,
                         "hour": hour,
-                        "from": 'head'
+                        "from": 'sch'
 
                     }
                     collection.insert_one(row)

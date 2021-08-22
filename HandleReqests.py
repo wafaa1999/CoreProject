@@ -560,9 +560,10 @@ def addNotification():
     flag = request.args.get('flag')
     time = request.args.get('time')
     hour = request.args.get('hour')
-
     response = dataBaseC().add_notification(flag, note, idDep, time, hour)
-    return jsonify({'response': response})
+    url = "https://virtual-grad.herokuapp.com/SendNotification"
+    url += "?idDep=" + idDep + "&note=" + note+"&flag=" + flag
+    return redirect(url)
 
 
 @app.route("/getNotification", methods=['GET'])
@@ -587,8 +588,18 @@ def editNotification():
 @app.route("/getTimesForHeadOfDep", methods=['GET'])
 def getTimesForHeadOfDep():
     response = []
-    response = dataBaseC().get_times_for_head_Dep()
+    date = request.args.get('date')
+    response = dataBaseC().get_times_for_head_Dep(date)
     return jsonify({'response': response})
+
+
+@app.route("/editPicked", methods=['GET'])
+def editPiked():
+    response = []
+    userName = request.args.get('userName')
+    url = "https://virtual-grad.herokuapp.com/editPicked"
+    url += "?userName=" + userName
+    return redirect(url)
 
 
 
