@@ -601,6 +601,13 @@ def editPiked():
     url += "?userName=" + userName
     return redirect(url)
 
+@app.route("/getTimesOfTable", methods=['GET'])
+def getTimesOfTable():
+    response = []
+    tableName = request.args.get('tableName')
+    idDep = request.args.get('idDep')
+    response = dataBaseC().get_time_of_table(idDep,tableName)
+    return jsonify({'response': response})
 
 
 

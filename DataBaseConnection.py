@@ -939,6 +939,27 @@ class dataBaseC():
         )
         return  'true'
 
+    def get_time_of_table(self, idDep, tableName):
+        result = self.get_tables_table(idDep)
+        for i in range(len(result)):
+            if result[i]['name'] == tableName:
+                year = result[i]['year']
+                sem = result[i]['semester']
+
+        result1 = self.get_times(sem, year)
+        row = {
+            "semester": result1[0]['semester'],
+            "date": result1[0]['date'],
+            "courseTimes": result1[0]['courseTimes'],
+            "labsTimes": result1[0]['labsTimes'],
+            "startandend": result1[0]['startandend']
+        }
+        response = []
+        response.append(row)
+        return response
+
+
+
 
 
 #     def updatcourse(self):
