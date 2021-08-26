@@ -287,7 +287,7 @@ class Schedule:
                                 classes[i].get_course().get_for_other_department() and not \
                                 classes[j].get_course().get_for_other_department():
                             if ((classes[i].get_course().get_year() == classes[j].get_course().get_year()) and
-                                (classes[i].get_course().get_total_number_of_sections() == 1 or classes[
+                                (classes[i].get_course().get_total_number_of_sections() == 1 and classes[
                                     j].get_course().get_total_number_of_sections() == 1)) and \
                                     classes[i].get_course().get_semester() == classes[j].get_course().get_semester():
                                 self._numbOfConflicts += 1

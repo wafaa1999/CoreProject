@@ -73,6 +73,16 @@ def redirect_checkAndSendEmail():
     url += "?email=" + email
     return redirect(url)
 
+@app.route('/sendEmailWithPassword', methods=['Get'])
+def sendEmailWithPassword():
+    email = request.args.get('email')
+    code = request.args.get('code')
+    url = "https://virtual-grad.herokuapp.com/sendEmailWithPassword"
+    # url = "http://127.0.0.1:5000/checkAndSendEmail"
+    url += "?email=" + email
+    url += "&code=" + code
+    return redirect(url)
+
 
 @app.route("/getMaterialsOfDepartment", methods=['GET'])
 def redirect_getMaterialsOfDepartment():
@@ -599,6 +609,17 @@ def editPiked():
     userName = request.args.get('userName')
     url = "https://virtual-grad.herokuapp.com/editPicked"
     url += "?userName=" + userName
+    return redirect(url)
+
+@app.route("/updatePassword", methods=['GET'])
+def updatePassword():
+    userName = request.args.get('userName')
+    new = request.args.get('new')
+    old = request.args.get('old')
+    url = "https://virtual-grad.herokuapp.com/updatePassword"
+    url += "?userName=" + userName
+    url += "&old=" + old
+    url += "&new=" + new
     return redirect(url)
 
 @app.route("/getTimesOfTable", methods=['GET'])
