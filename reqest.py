@@ -26,7 +26,7 @@ class req:
                     self._data5.add_course_to_dep(result2[j][5], result2[j][0], result2[j][1], result2[j][4],
                                                   result2[j][3], result2[j][2], result2[j][6])
                 for k in range(len(result3)):
-                    self._data5.add_Inst_to_dep(result3[k][1], result3[k][0])
+                    self._data5.add_inst_to_dep(self, result3[k][1], result3[k][0], '', '')
                 return 'True'
         return 'False'
 

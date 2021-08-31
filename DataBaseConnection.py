@@ -14,6 +14,24 @@ class dataBaseC():
             result.append(i)
         return result
 
+    def get_inti(self):
+        collection = self._db.Initial
+        for i in collection.find():
+            if i['state'] == 'false':
+                return False
+            else:
+              return True
+
+    def update_inti(self):
+        collection = self._db.Initial
+        doc = collection.find_one_and_update(
+            {"state": 'false'},
+            {"$set":
+                 {"state": 'true',
+                  }
+             }, upsert=True
+        )
+
     def get_times(self, semester, date):
         collection = self._db.SemesterTime
         result = []
@@ -222,7 +240,7 @@ class dataBaseC():
             }
             result = collection.insert_one(row)
 
-    def add_inst_to_dep(self, idDep, name):
+    def add_inst_to_dep(self, idDep, name,email,gender):
         collection = self._db.Inst
         flag = True
         res = self.get_istn()
@@ -234,6 +252,8 @@ class dataBaseC():
                 "idDepartment": idDep,
                 "name": name,
                 "type": 'normal',
+                "email":email,
+                "gender":gender
 
             }
             result = collection.insert_one(row)
@@ -464,13 +484,7 @@ class dataBaseC():
         result = collection.insert_one(row)
         return 'False'
 
-    def add_Inst_to_dep(self, idDep, name):
-        collection = self._db.Inst
-        row = {
-            "name": name,
-            "idDepartment": idDep,
-        }
-        result = collection.insert_one(row)
+
 
     def get_course_of_dep(self, idDep):
         course = self._db.Course
@@ -964,7 +978,7 @@ class dataBaseC():
 
 #     def updatcourse(self):
 #         collection = self._db["Inst"]
-#         collection.update_many({}, {"$set": {"type": "normal"}}, upsert=False, array_filters=None)
+#         collection.update_many({}, {"$set": {"gender": ""}}, upsert=False, array_filters=None)
 #
 #
 # d = dataBaseC().updatcourse()

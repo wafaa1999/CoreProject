@@ -65,6 +65,23 @@ def firstTime():
     return jsonify({'response': response})
 
 
+@app.route("/intiState", methods=['GET'])
+def intiState():
+    response = []
+    value = dataBaseC().get_inti()
+    if value:
+        response = 'true'
+        return jsonify({'response': response})
+    else:
+        dataBaseC().update_inti()
+        url = "https://virtual-grad.herokuapp.com/intiState"
+        # url = "http://127.0.0.1:5000/intiState"
+        return redirect(url)
+
+
+
+
+
 @app.route("/checkAndSendEmail", methods=['GET'])
 def redirect_checkAndSendEmail():
     email = request.args.get('email')
